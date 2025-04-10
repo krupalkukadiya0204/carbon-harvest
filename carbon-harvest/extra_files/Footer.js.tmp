@@ -1,0 +1,194 @@
+/**
+ * @file Footer.js - Site-wide footer component
+ * @module Footer
+ */
+
+import React, { useState, useCallback, memo } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { 
+    FaLinkedin, FaTwitter, FaInstagram, FaFacebook,
+    FaLeaf, FaHandshake, FaShieldAlt
+} from 'react-icons/fa';
+import './Footer.css';
+
+// Constants
+const FOOTER_LINKS = {
+    farmers: [
+        { text: 'Get Started', url: '/farmer/onboarding' },
+        { text: 'Success Stories', url: '/farmer/stories' },
+        { text: 'Training Videos', url: '/farmer/training' },
+        { text: 'Carbon Calculator', url: '/farmer/calculator' }
+    ],
+    industries: [
+        { text: 'Compliance Guide', url: '/industry/compliance' },
+        { text: 'Credit Trading', url: '/marketplace' },
+        { text: 'ESG Reporting', url: '/industry/esg' },
+        { text: 'Partner Network', url: '/industry/partners' }
+    ],
+    resources: [
+        { text: 'Blog', url: '/blog' },
+        { text: 'Documentation', url: '/docs' },
+        { text: 'FAQs', url: '/faqs' },
+        { text: 'Support', url: '/support' }
+    ]
+};
+
+/**
+ * Footer Component - Site-wide footer with navigation and social links
+ * @component
+ * @returns {JSX.Element} Footer component
+ */
+const Footer = () => {
+    const [email, setEmail] = useState('');
+    const [subscribeStatus, setSubscribeStatus] = useState('idle'); // idle, loading, success, error
+
+    const handleSubscribe = useCallback(async (e) => {
+        e.preventDefault();
+        if (!email) return;
+
+        setSubscribeStatus('loading');
+        try {
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            setSubscribeStatus('success');
+            setEmail('');
+            setTimeout(() => setSubscribeStatus('idle'), 3000);
+        } catch (error) {
+            setSubscribeStatus('error');
+            setTimeout(() => setSubscribeStatus('idle'), 3000);
+        }
+    }, [email]);
+
+    return (
+        <footer className="footer">
+            <div className="footer-content">
+                {/* Value Propositions */}
+                <div className="value-props">
+                    <div className="value-prop">
+                        <FaLeaf className="value-icon" />
+                        <h3>Sustainable Farming</h3>
+                        <p>Empowering farmers with sustainable practices</p>
+                    </div>
+                    <div className="value-prop">
+                        <FaHandshake className="value-icon" />
+                        <h3>Carbon Trading</h3>
+                        <p>Connecting farmers with carbon credit buyers</p>
+                    </div>
+                    <div className="value-prop">
+                        <FaShieldAlt className="value-icon" />
+                        <h3>Verified Impact</h3>
+                        <p>Ensuring transparent and verified carbon credits</p>
+                    </div>
+                </div>
+
+                {/* Navigation Links */}
+                <div className="footer-links">
+                    <div className="link-section">
+                        <h4>For Farmers</h4>
+                        <ul>
+                            {FOOTER_LINKS.farmers.map(link => (
+                                <li key={link.url}>
+                                    <Link to={link.url}>{link.text}</Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="link-section">
+                        <h4>For Industries</h4>
+                        <ul>
+                            {FOOTER_LINKS.industries.map(link => (
+                                <li key={link.url}>
+                                    <Link to={link.url}>{link.text}</Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="link-section">
+                        <h4>Resources</h4>
+                        <ul>
+                            {FOOTER_LINKS.resources.map(link => (
+                                <li key={link.url}>
+                                    <Link to={link.url}>{link.text}</Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+
+                {/* Newsletter Subscription */}
+                <div className="newsletter">
+                    <h4>Stay Updated</h4>
+                    <p>Subscribe to our newsletter for the latest updates</p>
+                    <form onSubmit={handleSubscribe}>
+                        <div className="input-group">
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Enter your email"
+                                disabled={subscribeStatus === 'loading'}
+                            />
+                            <button 
+                                type="submit"
+                                disabled={subscribeStatus === 'loading'}
+                                className={subscribeStatus === 'loading' ? 'loading' : ''}
+                            >
+                                {subscribeStatus === 'loading' ? 'Subscribing...' :
+                                 subscribeStatus === 'success' ? 'Subscribed!' :
+                                 subscribeStatus === 'error' ? 'Try Again' :
+                                 'Subscribe'}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                {/* Social Links */}
+                <div className="social-links">
+                    <motion.a 
+                        href="https://linkedin.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.1 }}
+                    >
+                        <FaLinkedin />
+                    </motion.a>
+                    <motion.a 
+                        href="https://twitter.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.1 }}
+                    >
+                        <FaTwitter />
+                    </motion.a>
+                    <motion.a 
+                        href="https://instagram.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.1 }}
+                    >
+                        <FaInstagram />
+                    </motion.a>
+                    <motion.a 
+                        href="https://facebook.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.1 }}
+                    >
+                        <FaFacebook />
+                    </motion.a>
+                </div>
+
+                {/* Copyright */}
+                <div className="copyright">
+                    <p>&copy; {new Date().getFullYear()} CarbonHarvest. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    );
+};
+
+Footer.displayName = 'Footer';
+
+export default memo(Footer);

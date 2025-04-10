@@ -1,0 +1,102 @@
+.insurance-portal {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.portal-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.portal-header h2 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.portal-header p {
+  color: #7f8c8d;
+}
+
+.insurance-steps {
+  margin-bottom: 2rem;
+}
+
+.insurance-card {
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.insurance-card:hover {
+  transform: translateY(-5px);
+}
+
+.insurance-icon {
+  font-size: 2.5rem;
+  color: #3498db;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.insurance-card h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.coverage-list {
+  margin: 1rem 0;
+}
+
+.coverage-list h4 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.coverage-list ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.coverage-list li {
+  color: #34495e;
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.coverage-list li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #27ae60;
+}
+
+.quote-review {
+  margin: 2rem 0;
+}
+
+.quote-details {
+  margin: 2rem 0;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.quote-details h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.application-form {
+  margin: 2rem 0;
+}
+
+@media (max-width: 768px) {
+  .insurance-steps {
+    margin-bottom: 1rem;
+  }
+  
+  .insurance-card {
+    margin-bottom: 1rem;
+  }
+}

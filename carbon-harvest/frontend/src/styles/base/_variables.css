@@ -1,0 +1,161 @@
+/*====================================================
+  THEME VARIABLES
+  Comprehensive CSS custom properties for consistent theming
+====================================================*/
+
+:root {
+  /*----------------------------------------------------
+    Typography
+  ----------------------------------------------------*/
+  --font-family-primary: "Inter", system-ui, -apple-system, sans-serif;
+  --font-family-heading: "Poppins", var(--font-family-primary);
+
+  /* Font Sizes (modular scale) */
+  --font-size-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --font-size-sm: clamp(0.875rem, 0.8rem + 0.25vw, 1rem);
+  --font-size-base: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
+  --font-size-lg: clamp(1.125rem, 1rem + 0.25vw, 1.25rem);
+  --font-size-xl: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  --font-size-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --font-size-3xl: clamp(2rem, 1.8rem + 1vw, 2.5rem);
+  --font-size-4xl: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /*----------------------------------------------------
+    Spacing System (8px grid)
+  ----------------------------------------------------*/
+  --spacing-unit: 0.5rem; /* 8px baseline */
+  --spacing-xs: calc(var(--spacing-unit) * 1); /* 8px */
+  --spacing-sm: calc(var(--spacing-unit) * 2); /* 16px */
+  --spacing-md: calc(var(--spacing-unit) * 3); /* 24px */
+  --spacing-lg: calc(var(--spacing-unit) * 4); /* 32px */
+  --spacing-xl: calc(var(--spacing-unit) * 6); /* 48px */
+  --spacing-2xl: calc(var(--spacing-unit) * 8); /* 64px */
+
+  /*----------------------------------------------------
+    Layout
+  ----------------------------------------------------*/
+  --max-width-xs: 20rem; /* 320px */
+  --max-width-sm: 30rem; /* 480px */
+  --max-width-md: 48rem; /* 768px */
+  --max-width-lg: 64rem; /* 1024px */
+  --max-width-xl: 80rem; /* 1280px */
+  --max-width-2xl: 90rem; /* 1440px */
+
+  /*----------------------------------------------------
+    Z-Index Scale
+  ----------------------------------------------------*/
+  --z-negative: -1;
+  --z-base: 0;
+  --z-elevated: 1;
+  --z-dropdown: 10;
+  --z-sticky: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+  --z-popover: 400;
+  --z-tooltip: 500;
+
+  /*----------------------------------------------------
+    Nature-Inspired Color Palette
+  ----------------------------------------------------*/
+  --colors-nature: {
+    --leaf-green: #4CAF50;
+    --moss-green: #2E7D32;
+    --forest-dark: #1B5E20;
+    --sky-blue: #03A9F4;
+    --water-blue: #0288D1;
+    --ocean-deep: #01579B;
+    --earth-brown: #795548;
+    --soil-light: #8D6E63;
+    --wood-dark: #4E342E;
+    --sunset-orange: #FF5722;
+    --sunrise-yellow: #FFB300;
+    --cloud-white: #FAFAFA;
+  }
+
+  /* Semantic Colors */
+  --color-primary: var(--colors-nature--leaf-green);
+  --color-primary-dark: var(--colors-nature--moss-green);
+  --color-primary-light: #81c784;
+  --color-secondary: var(--colors-nature--water-blue);
+  --color-accent: var(--colors-nature--sunset-orange);
+
+  /*----------------------------------------------------
+    Text Colors
+  ----------------------------------------------------*/
+  --text-primary: #1a237e;
+  --text-secondary: #455a64;
+  --text-muted: #78909c;
+  --text-light: var(--colors-nature--cloud-white);
+
+  /*----------------------------------------------------
+    Background Colors & Surfaces
+  ----------------------------------------------------*/
+  --bg-primary: var(--colors-nature--cloud-white);
+  --bg-secondary: #f5f7fa;
+  --bg-tertiary: #eef2f6;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  --surface-light: rgba(255, 255, 255, 0.9);
+  --surface-glass: rgba(255, 255, 255, 0.7);
+
+  /*----------------------------------------------------
+    Gradients
+  ----------------------------------------------------*/
+  --gradient-primary: linear-gradient(
+    135deg,
+    var(--colors-nature--moss-green) 0%,
+    var(--colors-nature--forest-dark) 100%
+  );
+  --gradient-secondary: linear-gradient(
+    135deg,
+    var(--colors-nature--sky-blue) 0%,
+    var(--colors-nature--water-blue) 100%
+  );
+  --gradient-accent: linear-gradient(
+    135deg,
+    var(--colors-nature--sunset-orange) 0%,
+    var(--colors-nature--sunrise-yellow) 100%
+  );
+
+  /*----------------------------------------------------
+    Border Radius
+  ----------------------------------------------------*/
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /*----------------------------------------------------
+    Shadows
+  ----------------------------------------------------*/
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  /*----------------------------------------------------
+    Transitions
+  ----------------------------------------------------*/
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /*----------------------------------------------------
+    Glass Effect
+  ----------------------------------------------------*/
+  --glass-background: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-blur: blur(12px);
+}

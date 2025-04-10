@@ -1,0 +1,59 @@
+/* Global Layout Styles */
+:root {
+  --content-padding-x: clamp(1rem, 5vw, 2rem);
+  --content-max-width: 1440px;
+  --section-margin: calc(-50vw + 50%);
+}
+
+/* Full-width container that breaks out of parent constraints */
+.full-width-container {
+  width: 100vw;
+  margin-left: var(--section-margin);
+  margin-right: var(--section-margin);
+  padding: 0;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  transform: translateX(-50%);
+}
+
+/* Content container with consistent padding */
+.content-container {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 0 var(--content-padding-x);
+  box-sizing: border-box;
+}
+
+/* Full-bleed section that maintains content width */
+.full-bleed-section {
+  width: 100vw;
+  margin-left: var(--section-margin);
+  margin-right: var(--section-margin);
+  padding: 3rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.full-bleed-section > * {
+  width: 100%;
+  max-width: var(--content-max-width);
+  padding: 0 var(--content-padding-x);
+  box-sizing: border-box;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  :root {
+    --content-padding-x: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --content-padding-x: 0.75rem;
+  }
+}

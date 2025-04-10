@@ -1,0 +1,194 @@
+/*====================================================
+  DESIGN SYSTEM - CARBON HARVEST
+====================================================*/
+
+:root {
+  /* Primary Colors */
+  --color-primary: #2E7D32;
+  --color-primary-light: #4CAF50;
+  --color-primary-dark: #1B5E20;
+  --color-primary-transparent: rgba(46, 125, 50, 0.1);
+
+  /* Secondary Colors */
+  --color-secondary: #1565C0;
+  --color-secondary-light: #1E88E5;
+  --color-secondary-dark: #0D47A1;
+
+  /* Accent Colors */
+  --color-accent: #FF6D00;
+  --color-accent-light: #FF9E40;
+  --color-accent-dark: #E65100;
+
+  /* Neutral Colors */
+  --color-background: #FFFFFF;
+  --color-surface: #F8F9FA;
+  --color-text-primary: #212121;
+  --color-text-secondary: #424242;
+  --color-text-tertiary: #757575;
+  --color-border: #E0E0E0;
+
+  /* Success/Error Colors */
+  --color-success: #43A047;
+  --color-error: #D32F2F;
+  --color-warning: #FFA000;
+  --color-info: #1976D2;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-xxl: 3rem;
+
+  /* Typography */
+  --font-family-primary: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-heading: 'Poppins', var(--font-family-primary);
+  
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* Border Radius */
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 1rem;
+  --border-radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 250ms ease-in-out;
+  --transition-slow: 350ms ease-in-out;
+
+  /* Z-index */
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal: 1040;
+  --z-index-popover: 1050;
+  --z-index-tooltip: 1060;
+  /* Typography */
+  --font-family-primary: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-heading: 'Poppins', var(--font-family-primary);
+  
+  /* Font Sizes */
+  --text-xs: 0.75rem;   /* 12px */
+  --text-sm: 0.875rem;  /* 14px */
+  --text-base: 1rem;    /* 16px */
+  --text-lg: 1.125rem;  /* 18px */
+  --text-xl: 1.25rem;   /* 20px */
+  --text-2xl: 1.5rem;   /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+  --text-4xl: 2.25rem;  /* 36px */
+  --text-5xl: 3rem;     /* 48px */
+  
+  /* Font Weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+
+  /* Layout */
+  --max-width: 1440px;
+  --min-width: 320px;
+  --container-padding: 1rem;
+  --section-spacing: 6rem;
+  --grid-gap: 2rem;
+  
+  /* Nature-Inspired Color Palette */
+  --leaf-green-50: #F3FAF3;
+  --leaf-green-100: #DCF5DC;
+  --leaf-green-500: #4CAF50;
+  --leaf-green-600: #2E7D32;
+  --leaf-green-700: #1B5E20;
+  
+  --sky-blue-50: #E3F2FD;
+  --sky-blue-100: #BBDEFB;
+  --sky-blue-500: #03A9F4;
+  --sky-blue-600: #0288D1;
+  --sky-blue-700: #01579B;
+  
+  --earth-brown-50: #EFEBE9;
+  --earth-brown-100: #D7CCC8;
+  --earth-brown-500: #795548;
+  --earth-brown-600: #5D4037;
+  --earth-brown-700: #3E2723;
+  
+  --sunset-orange-500: #FF5722;
+  --sunrise-yellow-500: #FFB300;
+  
+  /* Neutral Colors */
+  --neutral-50: #FAFAFA;
+  --neutral-100: #F5F5F5;
+  --neutral-200: #EEEEEE;
+  --neutral-300: #E0E0E0;
+  --neutral-400: #BDBDBD;
+  --neutral-500: #9E9E9E;
+  --neutral-600: #757575;
+  --neutral-700: #616161;
+  --neutral-800: #424242;
+  --neutral-900: #212121;
+  
+  /* Semantic Colors */
+  --text-primary: var(--neutral-900);
+  --text-secondary: var(--neutral-700);
+  --text-tertiary: var(--neutral-500);
+  --text-inverse: var(--neutral-50);
+  
+  --background-primary: var(--neutral-50);
+  --background-secondary: var(--neutral-100);
+  --background-tertiary: var(--neutral-200);
+  
+  /* Effects */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-full: 9999px;
+  
+  /* Z-Index */
+  --z-negative: -1;
+  --z-elevate: 1;
+  --z-sticky: 100;
+  --z-drawer: 200;
+  --z-modal: 300;
+  --z-popover: 400;
+  --z-toast: 500;
+  
+  /* Transitions */
+  --transition-all: all 0.3s ease;
+  --transition-transform: transform 0.3s ease;
+  --transition-opacity: opacity 0.3s ease;
+  --transition-colors: background-color 0.3s ease, border-color 0.3s ease;
+  
+  /* Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}

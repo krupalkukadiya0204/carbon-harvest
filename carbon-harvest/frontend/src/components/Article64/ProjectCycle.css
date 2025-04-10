@@ -1,0 +1,45 @@
+.project-cycle-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.project-cycle-container h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.cycle-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.info-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  height: fit-content;
+}
+
+.info-card h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.info-card ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.info-card li {
+  margin-bottom: 0.5rem;
+  color: #34495e;
+}
+
+@media (max-width: 768px) {
+  .cycle-content {
+    grid-template-columns: 1fr;
+  }
+}

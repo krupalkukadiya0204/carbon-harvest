@@ -1,0 +1,205 @@
+const Achievement = require('../models/Achievement');
+const User = require('../models/User');
+
+// Get user's gamification stats
+exports.getUserStats = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const achievements = await Achievement.find({ userId: req.user._id });
+    
+    // Calculate total points from achievements
+    const points = achievements.reduce((total, achievement) => total + achievement.points, 0);
+    
+    // Calculate level based on points (example: every 1000 points = 1 level)
+    const level = Math.floor(points / 1000) + 1;
+    
+    // Get user's rank
+    const usersWithHigherPoints = await Achievement.aggregate([
+      {
+        $group: {
+          _id: '$userId',
+          totalPoints: { $sum: '$points' }
+        }
+      },
+      {
+        $match: {
+          totalPoints: { $gt: points }
+        }
+      }
+    ]);
+    
+    const rank = usersWithHigherPoints.length + 1;
+    
+    res.json({
+      points,
+      level,
+      rank,
+      badges: user.badges || []
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get user's achievements and badges
+exports.getUserAchievements = async (req, res) => {
+  try {
+    const achievements = await Achievement.find({ userId: req.user._id });
+    res.json(achievements);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get leaderboard
+exports.getLeaderboard = async (req, res) => {
+  try {
+    const leaderboard = await Achievement.aggregate([
+      {
+        $group: {
+          _id: '$userId',
+          totalPoints: { $sum: '$points' }
+        }
+      },
+      {
+        $sort: { totalPoints: -1 }
+      },
+      {
+        $limit: 10
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'user'
+        }
+      }
+    ]);
+    res.json(leaderboard);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Create or update daily streak
+exports.updateDailyStreak = async (req, res) => {
+  try {
+    const today = new Date();
+    const achievement = await Achievement.findOne({
+      userId: req.user._id,
+      type: 'STREAK'
+    });
+
+    if (!achievement) {
+      const newStreak = new Achievement({
+        userId: req.user._id,
+        type: 'STREAK',
+        name: 'Daily Login Streak',
+        streakCount: 1,
+        lastLoginDate: today,
+        points: 10
+      });
+      await newStreak.save();
+      return res.json(newStreak);
+    }
+
+    const lastLogin = new Date(achievement.lastLoginDate);
+    const diffDays = Math.floor((today - lastLogin) / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 1) {
+      achievement.streakCount += 1;
+      achievement.points += 10;
+    } else if (diffDays > 1) {
+      achievement.streakCount = 1;
+      achievement.points = 10;
+    }
+
+    achievement.lastLoginDate = today;
+    await achievement.save();
+    res.json(achievement);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Create a new challenge
+exports.createChallenge = async (req, res) => {
+  try {
+    const { name, description, target, expiresAt } = req.body;
+    const challenge = new Achievement({
+      userId: req.user._id,
+      type: 'CHALLENGE',
+      name,
+      description,
+      progress: {
+        current: 0,
+        target
+      },
+      expiresAt,
+      points: 100
+    });
+    await challenge.save();
+    res.status(201).json(challenge);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Update challenge progress
+exports.updateChallengeProgress = async (req, res) => {
+  try {
+    const { challengeId, progress } = req.body;
+    const challenge = await Achievement.findById(challengeId);
+    
+    if (!challenge) {
+      return res.status(404).json({ message: 'Challenge not found' });
+    }
+
+    challenge.progress.current = progress;
+    if (challenge.progress.current >= challenge.progress.target) {
+      challenge.completed = true;
+      challenge.completedAt = new Date();
+    }
+
+    await challenge.save();
+    res.json(challenge);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Process referral
+exports.processReferral = async (req, res) => {
+  try {
+    const { referralCode } = req.body;
+    const referrer = await User.findOne({ referralCode });
+    
+    if (!referrer) {
+      return res.status(404).json({ message: 'Invalid referral code' });
+    }
+
+    let referralAchievement = await Achievement.findOne({
+      userId: referrer._id,
+      type: 'REFERRAL'
+    });
+
+    if (!referralAchievement) {
+      referralAchievement = new Achievement({
+        userId: referrer._id,
+        type: 'REFERRAL',
+        name: 'Referral Program',
+        referralCount: 1,
+        points: 50
+      });
+    } else {
+      referralAchievement.referralCount += 1;
+      referralAchievement.points += 50;
+    }
+
+    await referralAchievement.save();
+    res.json(referralAchievement);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

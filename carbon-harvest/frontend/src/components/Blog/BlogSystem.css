@@ -1,0 +1,99 @@
+.blog-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.blog-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.blog-header-section h2 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.blog-card {
+  margin-bottom: 2rem;
+}
+
+.blog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.author-info h4 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.post-date {
+  color: #7f8c8d;
+}
+
+.tag-container {
+  margin: 1rem 0;
+}
+
+.post-preview {
+  margin: 1rem 0;
+  color: #34495e;
+}
+
+.post-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+.sidebar-card {
+  margin-bottom: 1rem;
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag-cloud .clickable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tag-cloud .clickable:hover {
+  transform: scale(1.05);
+}
+
+.contributors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contributor-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .blog-header-section {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}

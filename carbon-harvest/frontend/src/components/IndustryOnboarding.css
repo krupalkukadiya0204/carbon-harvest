@@ -1,0 +1,323 @@
+.industry-onboarding {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.onboarding-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Progress Bar */
+.progress-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+}
+
+.progress-step::after {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: #e0e0e0;
+    z-index: 1;
+}
+
+.progress-step:last-child::after {
+    display: none;
+}
+
+.progress-step.active .step-icon {
+    background: #4CAF50;
+    color: white;
+}
+
+.progress-step.active::after {
+    background: #4CAF50;
+}
+
+.progress-step.current .step-icon {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.2);
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    z-index: 2;
+    transition: all 0.3s ease;
+    color: #757575;
+}
+
+.step-label {
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+}
+
+/* Form Container */
+.form-container {
+    padding: 2rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.form-step {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-step h3 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #444;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+.input-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.input-group input {
+    flex: 1;
+}
+
+.input-group select {
+    width: 120px;
+}
+
+.unit {
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    background: #f0f0f0;
+    border-radius: 6px;
+    color: #666;
+}
+
+/* File Upload */
+.file-upload {
+    position: relative;
+}
+
+.file-upload input[type="file"] {
+    display: none;
+}
+
+.file-upload-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #f0f0f0;
+    border: 1px dashed #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.file-upload-label:hover {
+    background: #e8e8e8;
+    border-color: #4CAF50;
+}
+
+.file-upload-label svg {
+    color: #666;
+}
+
+/* Checkbox Grid */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #4CAF50;
+}
+
+/* Form Navigation */
+.form-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.primary-button,
+.secondary-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.primary-button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+}
+
+.primary-button:hover {
+    background: #45a049;
+    transform: translateY(-1px);
+}
+
+.primary-button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}
+
+.secondary-button {
+    background: transparent;
+    color: #666;
+    border: 1px solid #ddd;
+}
+
+.secondary-button:hover {
+    background: #f5f5f5;
+    border-color: #999;
+}
+
+/* Success Step */
+.success-step {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.success-icon {
+    font-size: 4rem;
+    color: #4CAF50;
+    margin-bottom: 1.5rem;
+}
+
+.success-step h2 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.success-step p {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+/* Error Messages */
+.error {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .industry-onboarding {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .progress-bar {
+        padding: 0;
+    }
+
+    .step-label {
+        font-size: 0.8rem;
+    }
+
+    .form-container {
+        padding: 1rem;
+    }
+
+    .checkbox-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    .input-group select {
+        width: 100%;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-step {
+    animation: fadeIn 0.3s ease-out;
+}

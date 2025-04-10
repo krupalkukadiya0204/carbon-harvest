@@ -1,0 +1,76 @@
+.support-portal-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.support-portal-container h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+}
+
+.faq-card {
+  margin-bottom: 1rem;
+}
+
+.faq-card h3 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.faq-card p {
+  color: #34495e;
+  margin: 0;
+}
+
+.ticket-card {
+  margin-bottom: 1rem;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.ticket-id {
+  color: #7f8c8d;
+  font-family: monospace;
+}
+
+.new-ticket-btn {
+  margin-bottom: 1rem;
+}
+
+.documentation-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.documentation-section .ant-card {
+  height: 100%;
+}
+
+.documentation-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.documentation-section li {
+  margin-bottom: 0.5rem;
+  color: #34495e;
+  cursor: pointer;
+}
+
+.documentation-section li:hover {
+  color: #3498db;
+}
+
+@media (max-width: 768px) {
+  .documentation-section {
+    grid-template-columns: 1fr;
+  }
+}

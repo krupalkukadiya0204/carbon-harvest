@@ -1,0 +1,124 @@
+/*====================================================
+  LAYOUT VARIABLES & BASE STYLES
+====================================================*/
+:root {
+  /* Layout */
+  --header-height: 4rem;
+  --footer-height: 4rem;
+  --content-max-width: 1200px;
+  --container-padding: clamp(1rem, 5vw, 2rem);
+
+  /* Effects */
+  --pattern-opacity: 0.1;
+  --pattern-size: 80px;
+  
+  /* Spacing */
+  --section-spacing: clamp(2rem, 5vw, 4rem);
+  --content-spacing: clamp(1rem, 3vw, 2rem);
+}
+
+/*====================================================
+  PAGE LAYOUT
+====================================================*/
+.page-layout {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  color: var(--text-primary);
+}
+
+.page-content {
+  flex: 1;
+  margin-top: var(--header-height);
+  padding: var(--section-spacing) var(--container-padding);
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow-x: hidden;
+}
+
+.page-content:not(.full-width) {
+  max-width: var(--content-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*====================================================
+  DASHBOARD LAYOUT
+====================================================*/
+.dashboard-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-main {
+  flex: 1;
+  margin-top: var(--header-height);
+  margin-bottom: var(--footer-height);
+  padding: var(--content-spacing);
+  max-width: var(--content-max-width);
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*====================================================
+  BACKGROUND PATTERNS
+====================================================*/
+.background-pattern {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  opacity: 0.03;
+  pointer-events: none;
+  background: 
+      linear-gradient(45deg, var(--neutral-200) 25%, transparent 25%) -40px 0,
+      linear-gradient(-45deg, var(--neutral-200) 25%, transparent 25%) -40px 0,
+      linear-gradient(45deg, transparent 75%, var(--neutral-200) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--neutral-200) 75%);
+  background-size: var(--pattern-size) var(--pattern-size);
+}
+
+.pattern-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-light);
+  opacity: 0.5;
+}
+
+/*====================================================
+  RESPONSIVE STYLES
+====================================================*/
+@media (max-width: 768px) {
+  .page-content {
+    padding: calc(var(--section-spacing) * 0.75) var(--container-padding);
+  }
+
+  .dashboard-main {
+    padding: calc(var(--content-spacing) * 0.75);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-content {
+    padding: calc(var(--section-spacing) * 0.5) var(--container-padding);
+  }
+
+  .dashboard-main {
+    padding: calc(var(--content-spacing) * 0.5);
+  }
+}

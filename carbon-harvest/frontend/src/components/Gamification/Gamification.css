@@ -1,0 +1,115 @@
+.achievement-card {
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.achievement-card:hover {
+    transform: translateY(-5px);
+}
+
+.badge-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.progress-container {
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.streak-counter {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+}
+
+.leaderboard-row {
+    transition: background-color 0.2s ease-in-out;
+}
+
+.leaderboard-row:hover {
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.rank-badge {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.rank-1 {
+    background-color: #FFD700;
+    color: #000;
+}
+
+.rank-2 {
+    background-color: #C0C0C0;
+    color: #000;
+}
+
+.rank-3 {
+    background-color: #CD7F32;
+    color: #fff;
+}
+
+.challenge-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.challenge-card:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.challenge-progress {
+    height: 8px;
+    border-radius: 4px;
+    background-color: #E2E8F0;
+    overflow: hidden;
+}
+
+.challenge-progress-bar {
+    height: 100%;
+    background-color: #4CAF50;
+    transition: width 0.3s ease-in-out;
+}
+
+.points-badge {
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-weight: bold;
+    font-size: 0.875rem;
+}
+
+.referral-code {
+    font-family: monospace;
+    background-color: #F7FAFC;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: 1px dashed #CBD5E0;
+}
+
+@keyframes celebrate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.achievement-unlocked {
+    animation: celebrate 0.5s ease-in-out;
+}

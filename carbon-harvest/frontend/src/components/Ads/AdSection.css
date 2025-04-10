@@ -1,0 +1,146 @@
+.ad-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Promotional Banner Carousel */
+.promo-carousel {
+  margin-bottom: 3rem;
+}
+
+.promo-banner {
+  padding: 2rem;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.promo-banner h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.promo-banner p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+/* Featured Ads */
+.featured-ads {
+  margin-bottom: 3rem;
+}
+
+.featured-ads h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+}
+
+.ad-card {
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.ad-card:hover {
+  transform: translateY(-5px);
+}
+
+.ad-card.primary {
+  border-color: #3498db;
+}
+
+.ad-card.featured {
+  border-color: #f1c40f;
+}
+
+.ad-card.secondary {
+  border-color: #2ecc71;
+}
+
+.ad-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.ad-card h3 {
+  color: #2c3e50;
+  margin: 1rem 0;
+}
+
+.ad-card p {
+  color: #34495e;
+  margin-bottom: 1rem;
+}
+
+/* Partner Section */
+.partner-section {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.partner-section h2 {
+  color: #2c3e50;
+  margin-bottom: 2rem;
+}
+
+.partner-logos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  align-items: center;
+}
+
+.partner-logo {
+  height: 80px;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.partner-logo:hover {
+  transform: scale(1.05);
+}
+
+/* Call to Action Section */
+.cta-section {
+  background: linear-gradient(135deg, #3498db, #2ecc71);
+  color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cta-section h2 {
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.cta-section p {
+  margin-bottom: 0;
+  font-size: 1.1rem;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .partner-logos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cta-buttons {
+    margin-top: 1rem;
+    justify-content: center;
+  }
+  
+  .cta-section {
+    text-align: center;
+  }
+}
