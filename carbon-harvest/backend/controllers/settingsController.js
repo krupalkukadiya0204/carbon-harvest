@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const xss = require('xss-clean');
 const { body, validationResult } = require('express-validator');
 
 // Controller functions
@@ -21,7 +22,12 @@ const updateSettings = async (req, res) =>  {
         return res.status(400).json({ errors: errors.array() });
     }
     
+
     try {
+        // Sanitize inputs
+        req.body = xss().sanitize(req.body);
+
+
         const { emailNotifications, smsNotifications, language, theme, twoFactorAuth } = req.body;
 
         const user = await User.findById(req.user.id);

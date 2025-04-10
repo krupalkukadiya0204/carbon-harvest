@@ -1,10 +1,21 @@
-const express = require('express');
+const redis = require('redis');
+const { promisify } = require('util');
+const client = redis.createClient();
+client.on('connect', () => {
+    console.log('Connected to Redis');
+});
+client.on('error', (err) => {
+    console.error('Redis error:', err);
+});
+client.connect().catch(console.error);
+const getAsync = promisify(client.get).bind(client);
+const setAsync = promisify(client.set).bind(client);
+
+const helmet = require('helmet');
 const path = require('path');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 require('dotenv').config();
@@ -27,7 +38,6 @@ app.set('trust proxy', 1);
 app.use(morgan('combined'));
 
 // Security Middleware
-app.use(helmet());
 app.use(mongoSanitize());
 app.use(xss());
 

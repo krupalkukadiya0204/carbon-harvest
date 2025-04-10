@@ -1,9 +1,14 @@
 const Report = require("../models/Report");
 const { query, param, validationResult } = require("express-validator");
-
+const xss = require('xss-clean');
+const ActivityLog = require("../models/ActivityLog");
+const mongoose = require('mongoose'); 
+const { getAsync, setAsync, client } = require('../server');
+const sanitize = xss();
 const getReports = [
     query("startDate").optional().isDate().withMessage("startDate must be a valid date"),
     query("endDate").optional().isDate().withMessage("endDate must be a valid date"),
+    query("userId").optional().isMongoId().withMessage("userId must be a valid MongoDB ID"),
     query("page").optional().isInt({ min: 1 }).withMessage("page must be a positive integer"),
     query("limit").optional().isInt({ min: 1 }).withMessage("limit must be a positive integer"),
 
@@ -14,16 +19,27 @@ const getReports = [
         .withMessage("type must be one of: Carbon Emission, Water Usage, Biodiversity"),
     query("status").optional().isIn(["Pending", "Approved", "Rejected"]).withMessage("status must be one of: Pending, Approved, Rejected"),
     async (req, res) => {
-    const errors = validationResult(req);
+        req.query = sanitize(req.query);
+        const errors = validationResult(req);
+
+
+
+        
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+
+        
         try {
+            const cachedReports = await getAsync('reports');
+            if (cachedReports) {
+                return res.json(JSON.parse(cachedReports));
+            }
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        const { startDate, endDate, type, status } = req.query;
+        const { startDate, endDate, type, status, userId } = req.query;
          const query = {};
 
         // Add date range filter if provided
@@ -45,6 +61,11 @@ const getReports = [
         // Add status filter if provided
         if (status) {
             query.status = status;
+        }
+
+        //Add userId filter if provided
+        if (userId) {
+            query.$or = [{ farmerId: new mongoose.Types.ObjectId(userId) }, { industryId: new mongoose.Types.ObjectId(userId) }];
         }
 
         // Add user role-based filtering
@@ -78,16 +99,21 @@ const getReports = [
             totalReports
         });
 
+        await setAsync('reports', JSON.stringify({reports, currentPage: page, totalPages, totalReports}));
+
     } catch (error) {
         console.error("Error fetching reports:", error.message);
         res.status(500).json({ message: "Server error" });
     }
-}];
+}
+];
 
 const downloadReport = [
     param("reportId").isMongoId().withMessage("reportId must be a valid MongoDB ID"),
     async (req, res) => {
-    const errors = validationResult(req);
+        req.params = sanitize(req.params);
+        const errors = validationResult(req);
+        
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
@@ -140,7 +166,49 @@ const downloadReport = [
     }
 }];
 
+const addReport = [async (req, res, next) => {
+        try{
+                await client.del('reports');
+                next()
+        } catch (error) {
+                console.error("Error deleting cache:", error.message);
+                res.status(500).json({ message: "Server error" });
+        }
+}, async(req, res) => {
+    try {
+        await ActivityLog.create({
+            userId: req.user._id,
+            action: "report added",
+            details: `Report added by user ${req.user._id}`,
+        });
+        res.status(201).json({ message: "report added" });
+    } catch (error) {
+        console.error("Error creating activity log:", error.message);
+        res.status(500).json({ message: "Server error" });
+    }
+}];
+
+const updateReport = [async (req, res, next) => {
+    try {
+        await client.del('reports');
+        next()
+    } catch (error) {
+        console.error("Error deleting cache:", error.message);
+        res.status(500).json({ message: "Server error" });
+    }
+}, async (req, res) => {
+    await ActivityLog.create({
+        userId: req.user._id,
+        action: "report updated",
+        details: `report updated by user ${req.user._id}`,
+    });
+}];
+
+
+
 module.exports = {
     getReports,
-    downloadReport
+    downloadReport,
+    addReport,
+    updateReport
 };

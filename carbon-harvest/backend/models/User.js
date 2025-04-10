@@ -33,6 +33,11 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please provide a user type'],
         enum: ['farmer', 'industry', 'regulator']
     },
+    role: {
+        type: String,
+        enum: ['user', 'farmer', 'industry', 'regulator', 'admin'],
+        default: 'user'
+    },
     organization: {
         type: String,
         trim: true
@@ -40,6 +45,18 @@ const userSchema = new mongoose.Schema({
     phone: {
         type: String,
         trim: true
+    },
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
+    passwordResetToken: {
+        type: String,
+        required: false
+    },
+    passwordResetExpires: {
+        type: Date,
+        required: false
     },
     location: {
         type: String,

@@ -1,8 +1,12 @@
 /**
  * @file User Controller - Handles user management operations
  */
+const { getAsync, setAsync, client } = require('../server');
+const ActivityLog = require('../models/ActivityLog');
 
 const User = require('../models/User');
+
+const xss = require('xss-clean');
 const { body, validationResult } = require('express-validator');
 
 /**
@@ -28,7 +32,13 @@ const USER_ERRORS = {
  * @returns {Promise<void>}
  */
 const getUsers = async (req, res) => {
+    // Sanitize inputs
+    req.body = xss(req.body);
+    req.query = xss(req.query);
+    req.params = xss(req.params);
+
     try {
+
         const users = await User.find();
         res.status(200).json(users);
     } catch (error) {
@@ -60,6 +70,11 @@ const getUsers = async (req, res) => {
  */
 const verifyUser = async (req, res) => {
     const userId = req.params.id;
+    // Sanitize inputs
+    req.body = xss(req.body);
+    req.query = xss(req.query);
+    req.params = xss(req.params);
+
 
     try {
         const user = await User.findById(userId);
@@ -94,25 +109,42 @@ const verifyUser = async (req, res) => {
  * @returns {Promise<void>}
  */
 const getUserProfile = async (req, res) => {
+    // Sanitize inputs
+    req.body = xss(req.body);
+    req.query = xss(req.query);
+    req.params = xss(req.params);
+
     try {
-        console.log('Getting user profile for user ID:', req.user?.id);
-        if (!req.user || !req.user.id) {
-            console.error('No user ID found in request');
+        const userId = req.user.id;
+        if (!userId) {
+            console.error('No user ID found in request.');
             return res.status(401).json({ message: USER_ERRORS.UNAUTHORIZED });
         }
 
-        const user = await User.findById(req.user.id).select('-password');
-        console.log('Found user:', user ? 'Yes' : 'No');
+        const cacheKey = `user-profile:${userId}`;
+        const cachedProfile = await getAsync(cacheKey);
+
+        if (cachedProfile) {
+            console.log('Serving user profile from cache.');
+            return res.status(200).json({ user: JSON.parse(cachedProfile) });
+        }
+
+        console.log('Fetching user profile from database.');
+        const user = await User.findById(userId).select('-password');
 
         if (!user) {
-            console.error('User not found in database for ID:', req.user.id);
+            console.error('User not found in database for ID:', userId);
             return res.status(404).json({ message: USER_ERRORS.USER_NOT_FOUND });
         }
+
+        await setAsync(cacheKey, JSON.stringify(user));
+        console.log('User profile cached successfully.');
 
         res.status(200).json({ user });
     } catch (error) {
         console.error('Error fetching user profile:', error);
-        res.status(500).json({ message: USER_ERRORS.FETCH_FAILED });
+        res.status(500).json({ message: USER_ERRORS.FETCH_FAILED, error: error.message });
+
     }
 };
 
@@ -152,6 +184,10 @@ const updateProfileValidation = [
 ];
 const updateProfile = [updateProfileValidation,async (req, res) => {
   try {
+      // Sanitize inputs
+    req.body = xss(req.body);
+    req.query = xss(req.query);
+    req.params = xss(req.params);
     const userId = req.user.id;
     const {
       name,
@@ -212,7 +248,20 @@ const updateProfile = [updateProfileValidation,async (req, res) => {
       user.gstNumber = gstNumber;
       user.certifications = certifications;
     }
+    // Invalidate the cache
+    const cacheKey = `user-profile:${userId}`;
+    if (client.connected) {
+        await client.del(cacheKey);
+    }
     await user.save();
+        // Add activity log
+    const activityLog = new ActivityLog({
+        userId: user._id,
+        action: 'user updated profile',
+    });
+
+    await activityLog.save();
+
     res.status(200).json({ message: 'Profile updated successfully', user });
   } catch (error) {
     console.error('Error updating profile:', error);

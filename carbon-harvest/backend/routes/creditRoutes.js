@@ -1,31 +1,32 @@
 const express = require('express');
 const { addCredit, getCredits, buyCredit, getCreditStats, validateAddCredit, validateBuyCredit } = require('../controllers/creditController');
-const { protect: authMiddleware } = require('../middleware/authMiddleware');
+const { protect: authMiddleware, authorize } = require('../middleware/authMiddleware');
 const Credit = require('../models/Credit');
 
 const router = express.Router();
 
 // Get credit statistics
-router.get('/stats', authMiddleware, getCreditStats);
+router.get('/stats', authMiddleware, authorize(['farmer', 'industry']), getCreditStats);
 
 // Get credits by type
-router.get('/by-type/:type', authMiddleware, async (req, res) => {
+router.get('/by-type/:type', authMiddleware, authorize(['farmer', 'industry']), async (req, res) => {
     try {
         const credits = await Credit.find({ creditType: req.params.type })
-            .populate('farmer', 'name location')
+            .populate('user', 'name location')
             .sort('-createdAt');
         res.json(credits);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching credits by type' });
     }
 });
-
+router.get('/', getCredits);
 // Get credits by state
-router.get('/by-state/:state', authMiddleware, async (req, res) => {
+router.get('/by-state/:state', authMiddleware, authorize(['farmer', 'industry']), async (req, res) => {
     try {
         const credits = await Credit.find({ 'location.state': req.params.state })
-            .populate('farmer', 'name location')
+            .populate('user', 'name location')
             .sort('-createdAt');
+           
         res.json(credits);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching credits by state' });
@@ -33,7 +34,7 @@ router.get('/by-state/:state', authMiddleware, async (req, res) => {
 });
 
 // Get trading history
-router.get('/trading-history', authMiddleware, async (req, res) => {
+router.get('/trading-history', authMiddleware, authorize(['farmer', 'industry']), async (req, res) => {
     try {
         const history = await Credit.aggregate([
             { $unwind: '$tradingHistory' },
@@ -47,7 +48,7 @@ router.get('/trading-history', authMiddleware, async (req, res) => {
 });
 
 // Get sustainability metrics
-router.get('/sustainability', authMiddleware, async (req, res) => {
+router.get('/sustainability', authMiddleware, authorize(['farmer', 'industry']), async (req, res) => {
     try {
         const metrics = await Credit.aggregate([
             {
@@ -67,12 +68,10 @@ router.get('/sustainability', authMiddleware, async (req, res) => {
 });
 
 // Add a new credit
-router.post('/', authMiddleware, validateAddCredit, addCredit);
+router.post('/', authMiddleware, authorize(['farmer']), validateAddCredit, addCredit);
 
-// Get all credits
-router.get('/', getCredits);
 
 // Buy a credit
-router.post('/buy/:id', authMiddleware, validateBuyCredit, buyCredit);
+router.post('/buy/:id', authMiddleware, authorize(['industry']), validateBuyCredit, buyCredit);
 
 module.exports = router; 

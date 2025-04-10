@@ -1,6 +1,7 @@
 const Achievement = require('../models/Achievement');
 const User = require('../models/User');
 const { body, validationResult } = require('express-validator');
+const xss = require('xss-clean');
 
 // Get user's gamification stats
 exports.getUserStats = async (req, res) => {
@@ -15,7 +16,7 @@ exports.getUserStats = async (req, res) => {
     const level = Math.floor(points / 1000) + 1;
     
     // Get user's rank
-    const usersWithHigherPoints = await Achievement.aggregate([
+    const usersWithHigherPoints = await Achievement.aggregate([      
       {
         $group: {
           _id: '$userId',
@@ -43,6 +44,9 @@ exports.getUserStats = async (req, res) => {
 };
 
 // Get user's achievements and badges
+
+
+
 exports.getUserAchievements = async (req, res) => {
   try {
     const achievements = await Achievement.find({ userId: req.user._id });
@@ -54,7 +58,7 @@ exports.getUserAchievements = async (req, res) => {
 
 // Get leaderboard
 exports.getLeaderboard = async (req, res) => {
-  try {
+  try {    
     const leaderboard = await Achievement.aggregate([
       {
         $group: {
@@ -86,6 +90,13 @@ exports.getLeaderboard = async (req, res) => {
 // Create or update daily streak
 exports.updateDailyStreak = async (req, res) => {
   try {
+    // Sanitize input
+    req.user._id = xss(req.user._id);
+    
+    if (req.body) {
+      Object.keys(req.body).forEach(key => req.body[key] = xss(req.body[key]));
+    }
+
     const today = new Date();
     const achievement = await Achievement.findOne({
       userId: req.user._id,
@@ -141,6 +152,14 @@ exports.validateCreateChallenge = [
 
 exports.createChallenge = async (req, res) => {
   try {
+        // Sanitize input
+    req.user._id = xss(req.user._id);
+    
+    if (req.body) {
+      Object.keys(req.body).forEach(key => req.body[key] = xss(req.body[key]));
+    }
+    
+
     const { name, description, target, expiresAt } = req.body;
     const challenge = new Achievement({
       userId: req.user._id,
@@ -178,6 +197,11 @@ exports.validateUpdateChallengeProgress = [
 
 exports.updateChallengeProgress = async (req, res) => {
   try {
+    // Sanitize input
+    if (req.body) {
+      Object.keys(req.body).forEach(key => req.body[key] = xss(req.body[key]));
+    }
+
     const { challengeId, progress } = req.body;
     const challenge = await Achievement.findById(challengeId);
     
@@ -214,6 +238,11 @@ exports.validateProcessReferral = [
 
 exports.processReferral = async (req, res) => {
   try {
+    // Sanitize input
+    if (req.body) {
+      Object.keys(req.body).forEach(key => req.body[key] = xss(req.body[key]));
+    }
+
     const { referralCode } = req.body;
     const referrer = await User.findOne({ referralCode });
     

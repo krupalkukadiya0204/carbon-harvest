@@ -3,6 +3,7 @@
  */
 
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 /**
  * Error messages for authentication middleware
@@ -34,19 +35,34 @@ const protect = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
+        User.findById(decoded.id).then(user=>{
+            if(!user){
+                return res.status(401).json({ message: AUTH_MIDDLEWARE_ERRORS.INVALID_TOKEN });
+            }
+            req.user = user;
+            next();
+        }).catch(error=>{
+            console.error('Token verification error:', error.message);
+            res.status(401).json({ message: AUTH_MIDDLEWARE_ERRORS.INVALID_TOKEN });
+        })
     } catch (error) { 
         console.error('Token verification error:', error.message);
         res.status(401).json({ message: AUTH_MIDDLEWARE_ERRORS.INVALID_TOKEN });
     }
 };
 
-const validateAdmin = (req, res, next) => {
-    if (!req.user || req.user.userType !== 'Regulator') {
-        return res.status(403).json({ message: 'Access denied. Admin privileges required.' });
+/**
+ * Middleware to authorize requests based on user roles
+ * @param {string[]} roles - An array of roles that are allowed to access the route
+ * @returns {function} Express middleware function
+ */
+const authorize = (roles) => (req, res, next) => {
+    if (!req.user) {
+        return res.status(401).json({ message: AUTH_MIDDLEWARE_ERRORS.NO_TOKEN });
+    }
+    if (!roles.includes(req.user.role)) {
+        return res.status(403).json({ message: 'Forbidden. Insufficient privileges.' });
     }
     next();
 };
-
-module.exports = { protect, validateAdmin };
+module.exports = { protect, authorize };

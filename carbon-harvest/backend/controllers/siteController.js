@@ -1,5 +1,6 @@
 const SiteSettings = require('../models/SiteSettings');
 const { body, validationResult } = require('express-validator');
+const xss = require('xss');
 
 // Get footer data
 const getFooterData = async (req, res) => {
@@ -43,10 +44,16 @@ const validateFooterData = [
 
 // Update footer data
 const updateFooterData =  async (req, res) => {
+    // Sanitize all fields
+    const sanitizedData = {};
+    for (const key in req.body) {
+        sanitizedData[key] = xss(req.body[key]);
+    }
+
     try {
         const updatedData = await SiteSettings.findOneAndUpdate(
             { type: 'footer' },
-            { $set: { ...req.body } },
+            { $set: { ...sanitizedData } },
             { new: true, upsert: true }
         );
         res.json({

@@ -1,89 +1,64 @@
-/**
- * verificationService.js
- *
- * This file contains functions to handle the carbon credit verification process.
- */
+const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
-/**
- * @typedef {Object} ProjectData
- * @property {string} projectId - The unique identifier for the project.
- * @property {string} projectName - The name of the project.
- * @property {string} projectType - The type of project (e.g., reforestation, renewable energy).
- * @property {number} emissionReduction - The estimated emission reduction of the project.
- * @property {string} location - The location of the project.
- * @property {Date} startDate - The start date of the project.
- * @property {Date} endDate - The end date of the project.
- */
-
-/**
- * Checks if a project is eligible for carbon credit certification.
- * @param {ProjectData} projectData - The data of the project.
- * @returns {boolean} - True if the project is eligible, false otherwise.
- */
-const isProjectEligible = (projectData) => {
-  // Implement logic to check project eligibility
-  // This could involve checking project type, location, size, etc.
-  if (!projectData) {
-    console.error("Project data is missing.");
-    return false;
-  }
-
-  if (
-    !projectData.projectId ||
-    !projectData.projectName ||
-    !projectData.projectType ||
-    typeof projectData.emissionReduction !== "number" ||
-    !projectData.location ||
-    !projectData.startDate ||
-    !projectData.endDate
-  ) {
-    console.error("Invalid project data.");
-    return false;
-  }
-  if (projectData.emissionReduction <= 0) {
-    console.error("Emission reduction must be greater than zero.");
-    return false;
-  }
-  return true; // Placeholder - replace with actual eligibility logic
+const generateVerificationToken = (user) => {
+  const verificationToken = jwt.sign(
+    { userId: user._id },
+    process.env.JWT_VERIFICATION_SECRET,
+    {
+      expiresIn: '1h',
+    }
+  );
+  return verificationToken;
 };
 
-/**
- * Calculates the amount of carbon credits that can be issued for a project.
- * @param {ProjectData} projectData - The data of the project.
- * @returns {number} - The amount of carbon credits.
- */
-const calculateCarbonCredits = (projectData) => {
-  // Implement logic to calculate carbon credits
-  // This could involve complex formulas based on project type and emission reduction
-  if (!isProjectEligible(projectData)) {
-    console.error("Project is not eligible for carbon credit calculation.");
-    return 0;
-  }
-  const { emissionReduction } = projectData;
-  // Placeholder - replace with actual calculation logic
-  return emissionReduction;
+const sendVerificationEmail = async (user, verificationToken) => {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: user.email,
+    subject: 'Email Verification',
+    html: `<p>Please click this link to verify your email: <a href="${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}">Verify Email</a></p>`,
+  };
+
+  await transporter.sendMail(mailOptions);
 };
 
-/**
- * Generates a verification report for a project.
- * @param {ProjectData} projectData - The data of the project.
- * @returns {string} - The verification report.
- */
-const generateVerificationReport = (projectData) => {
-  // Implement logic to generate a verification report
-  // This could include project details, verification results, etc.
-  if (!isProjectEligible(projectData)) {
-    console.error("Project is not eligible for verification report.");
-    return "Project is not eligible for verification.";
-  }
-  const carbonCredits = calculateCarbonCredits(projectData);
-  // Placeholder - replace with actual report generation logic
-  return `Verification Report for ${projectData.projectName}\nProject ID: ${
-    projectData.projectId
-  }\nCarbon Credits: ${carbonCredits} tons\nProject Type: ${
-    projectData.projectType
-  }\nLocation: ${projectData.location}\nStart Date: ${projectData.startDate}\nEnd Date: ${projectData.endDate}`;
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+    });
+
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Password Reset Request',
+        html: `
+            <p>Hello ${name},</p>
+            <p>You recently requested to reset your password for your account.</p>
+            <p>Please click on the following link to reset your password:</p>
+            <a href="${process.env.FRONTEND_URL}/reset-password?token=${token}">Reset Password</a>
+            <p>This link will expire in 1 hour.</p>
+            <p>If you did not request a password reset, please ignore this email.</p>
+        `,
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+    } catch (error) {
+        console.error('Error sending password reset email:', error);
+        throw new Error('Error sending password reset email');
+    }
 };
 
-// Export the functions to be used in other files
-export { isProjectEligible, calculateCarbonCredits, generateVerificationReport };
+module.exports = { generateVerificationToken, sendVerificationEmail, sendPasswordResetEmail };

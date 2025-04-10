@@ -1,11 +1,15 @@
 /**
  * @file Credit Controller - Handles all carbon credit related operations
  * @module creditController
- */
+ */+
 
 const Credit = require('../models/Credit');
 const User = require('../models/User');
+const client = require('../server');
 const { body, param, validationResult } = require('express-validator');
+const xss = require('xss-clean');
+const ActivityLog = require('../models/ActivityLog');
+const { getAsync, setAsync } = require('../server');
 
 /**
  * Error messages for credit operations
@@ -69,6 +73,13 @@ const calculateSustainabilityMetrics = (creditType, amount) => {
  * @returns {Promise<void>}
  */
 const addCredit = async (req, res) => {
+    // Sanitize inputs
+    req.body.amount = xss().clean(req.body.amount);
+    req.body.price = xss().clean(req.body.price);
+    req.body.creditType = xss().clean(req.body.creditType);
+    req.body.location = xss().clean(req.body.location);
+
+
     // Validate request body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -96,13 +107,22 @@ const addCredit = async (req, res) => {
             }
         });
 
+        client.del('credits');
         await newCredit.save();
+        
+        //add activity log
+        await ActivityLog.create({
+          userId: req.user.id,
+          action: 'credit added',
+          details: `New credit of type ${creditType} added by user ${req.user.id}`,
+        });
         
         // Populate farmer details
         await newCredit.populate('farmer', 'name location');
 
         res.status(201).json(newCredit);
     } catch (error) {
+
         console.error('Error adding credit:', error.message);
        
         res.status(500).json({ message: 'Failed to add credit. Please try again later.', error: error.message });
@@ -117,29 +137,65 @@ const addCredit = async (req, res) => {
  * @returns {Promise<void>}
  */
 const getCredits = async (req, res) => {
+  
   try {
+    const cacheKey = 'credits';
+    const cachedCredits = await getAsync(cacheKey);
+
+    if (cachedCredits) {
+        console.log('Credits data served from cache');
+        return res.status(200).json(JSON.parse(cachedCredits));
+    }
+    
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
+    
+    // Sanitize inputs
+    req.query.status = xss().clean(req.query.status);
+    req.query.type = xss().clean(req.query.type);
+    req.query.userId = xss().clean(req.query.userId);
+    req.query.startDate = xss().clean(req.query.startDate);
+    req.query.endDate = xss().clean(req.query.endDate);
+
+    const { status, type, userId, startDate, endDate } = req.query;
+
+    // Build the filter object
+    const filter = {};
+    if (status) filter.status = status;
+    if (type) filter.creditType = type;
+    if (userId) filter.farmer = userId;
+
+    if (startDate || endDate) {
+        filter.createdAt = {};
+        if (startDate) filter.createdAt.$gte = new Date(startDate);
+        if (endDate) filter.createdAt.$lte = new Date(endDate);
+    }
 
     const totalCredits = await Credit.countDocuments();
     const totalPages = Math.ceil(totalCredits / limit);
 
-    const credits = await Credit.find()
+    const credits = await Credit.find(filter)
       .skip(skip)
       .limit(limit);
 
-    res.status(200).json({
-      credits,
-      pagination: {
-        totalCredits,
-        totalPages,
-        currentPage: page,
-        creditsPerPage: limit,
-        hasNextPage: page < totalPages,
-        hasPreviousPage: page > 1
-      }
+    const data = {
+        credits,
+        pagination: {
+            totalCredits,
+            totalPages,
+            currentPage: page,
+            creditsPerPage: limit,
+            hasNextPage: page < totalPages,
+            hasPreviousPage: page > 1
+        }
+    };
+    
+    await setAsync(cacheKey, JSON.stringify(data), 'EX', 60); // Cache for 60 seconds
+
+    res.status(200).json(data);
     });
+
   } catch (error) {
         console.error('Error fetching credits:', error.message);
         
@@ -155,6 +211,7 @@ const getCredits = async (req, res) => {
  * @returns {Promise<void>}
  */
 const getCreditStats = async (req, res) => {
+  
     try {
         const stats = await Credit.aggregate([
             {
@@ -206,6 +263,9 @@ const getCreditStats = async (req, res) => {
  * @param res
  */
 const buyCredit = async (req, res) => {
+        // Sanitize input
+        req.params.id = xss().clean(req.params.id);
+
         // Validate request parameters
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -232,7 +292,16 @@ const buyCredit = async (req, res) => {
             seller: credit.farmer
         });
 
+        client.del('credits');
         await credit.save();
+        
+        //add activity log
+        await ActivityLog.create({
+          userId: req.user.id,
+          action: 'credit buyed',
+          details: `Credit ${credit.id} buyed by user ${req.user.id}`,
+        });
+
 
         res.status(200).json({ message: 'Credit purchased successfully', credit });
     } catch (error) {

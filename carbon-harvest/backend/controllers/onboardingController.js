@@ -1,6 +1,7 @@
 const { FarmerProfile, IndustryProfile, RegulatorProfile } = require('../models/UserProfile');
 const User = require('../models/User');
 const { body, validationResult } = require('express-validator');
+const xss = require('xss-clean');
 
 const completeOnboarding = async (userId) => {
     await User.findByIdAndUpdate(userId, { onboardingStatus: 'completed' });
@@ -10,6 +11,7 @@ const handleFarmerOnboarding = async (req, res) => {
     try {
         // Validate request body
         await Promise.all([
+            xss(),
             body('name').notEmpty().withMessage('Name is required').run(req),
             body('phone').notEmpty().withMessage('Phone is required').isMobilePhone().withMessage('Invalid phone number').run(req),
             body('location.address').notEmpty().withMessage('Address is required').run(req),
@@ -31,6 +33,11 @@ const handleFarmerOnboarding = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+        // Sanitize Inputs
+        for (const key in req.body) {
+            req.body[key] = xss(req.body[key]);
+        }
+        
         const farmerProfile = new FarmerProfile({
             userId: req.user.id,
             ...req.body
@@ -47,6 +54,7 @@ const handleFarmerOnboarding = async (req, res) => {
 const handleIndustryOnboarding = async (req, res) => {
     try {
         await Promise.all([
+            xss(),
             body('name').notEmpty().withMessage('Name is required').run(req),
             body('phone').notEmpty().withMessage('Phone is required').isMobilePhone().withMessage('Invalid phone number').run(req),
             body('location.address').notEmpty().withMessage('Address is required').run(req),
@@ -67,6 +75,10 @@ const handleIndustryOnboarding = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+        // Sanitize Inputs
+        for (const key in req.body) {
+            req.body[key] = xss(req.body[key]);
+        }
 
         const industryProfile = new IndustryProfile({
             userId: req.user.id,
@@ -84,6 +96,7 @@ const handleIndustryOnboarding = async (req, res) => {
 const handleRegulatorOnboarding = async (req, res) => {
     try {
          await Promise.all([
+            xss(),
             body('name').notEmpty().withMessage('Name is required').run(req),
             body('phone').notEmpty().withMessage('Phone is required').isMobilePhone().withMessage('Invalid phone number').run(req),
             body('location.address').notEmpty().withMessage('Address is required').run(req),
@@ -101,6 +114,10 @@ const handleRegulatorOnboarding = async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
+        }
+        // Sanitize Inputs
+        for (const key in req.body) {
+            req.body[key] = xss(req.body[key]);
         }
         const regulatorProfile = new RegulatorProfile({
             userId: req.user.id,
