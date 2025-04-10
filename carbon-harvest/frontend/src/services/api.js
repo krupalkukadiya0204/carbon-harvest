@@ -86,6 +86,62 @@ export const userAPI = {
     verifyUser: (userId) => api.post(`/users/verify/${userId}`)
 };
 
+// Gamification APIs
+export const gamificationAPI = {
+    // Get user stats
+    getUserStats: () => api.get('/gamification/stats'),
+
+    // Get user achievements
+    getUserAchievements: () => api.get('/gamification/achievements'),
+
+    // Get leaderboard
+    getLeaderboard: () => api.get('/gamification/leaderboard'),
+
+    // Update daily streak
+    updateDailyStreak: () => api.post('/gamification/streak'),
+
+    // Create new challenge
+    createChallenge: (challengeData) => api.post('/gamification/challenge', challengeData),
+
+    // Update challenge progress
+    updateChallengeProgress: (progressData) => api.put('/gamification/challenge/progress', progressData),
+
+    // Process referral
+    processReferral: (referralData) => api.post('/gamification/referral', referralData)
+};
+
+// Onboarding APIs
+export const onboardingAPI = {
+    // Handle farmer onboarding
+    handleFarmerOnboarding: (onboardingData) => api.post('/onboarding/farmer-onboarding', onboardingData),
+
+    // Handle industry onboarding
+    handleIndustryOnboarding: (onboardingData) => api.post('/onboarding/industry-onboarding', onboardingData),
+
+    // Handle regulator onboarding
+    handleRegulatorOnboarding: (onboardingData) => api.post('/onboarding/regulator-onboarding', onboardingData)
+};
+
+// Reports APIs
+export const reportsAPI = {
+    // Get reports with filters
+    getReports: () => api.get('/reports'),
+
+    // Download a specific report
+    downloadReport: (reportId) => api.get(`/reports/${reportId}/download`)
+};
+
+// Settings APIs
+export const settingsAPI = {
+    // Get user settings
+    getSettings: () => api.get('/settings'),
+
+    // Update user settings
+    updateSettings: (settingsData) => api.put('/settings', settingsData)
+};
+
+
+
 // Blog APIs
 export const blogAPI = {
     // Get all posts
@@ -184,5 +240,33 @@ export const newsAPI = {
     // Subscribe to newsletter
     subscribeNewsletter: (email) => api.post('/news/subscribe', { email })
 };
+
+// Site APIs
+export const siteAPI = {
+    // Get footer data
+    getFooterData: () => api.get('/site/footer'),
+
+    // Update footer data
+    updateFooterData: (footerData) => api.put('/site/footer', footerData)
+};
+
+// Admin APIs
+export const adminAPI = {
+    // Get all users
+    getUsers: () => api.get('/admin/users'),
+
+    // Get details of a specific user
+    getUserDetails: (userId) => api.get(`/admin/users/${userId}`),
+
+    // Update a user
+    updateUser: (userId, userData) => api.put(`/admin/users/${userId}`, userData),
+
+    // Delete a user
+    deleteUser: (userId) => api.delete(`/admin/users/${userId}`),
+
+    // Verify a user
+    verifyUser: (userId) => api.post(`/admin/users/${userId}/verify`)
+};
+
 
 export default api;

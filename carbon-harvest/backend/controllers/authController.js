@@ -1,9 +1,12 @@
 /**
  * @file Authentication Controller - Handles user registration and login
  */
-
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { body, validationResult } = require('express-validator');
+
+
 const User = require('../models/User');
 
 /**
@@ -18,6 +21,23 @@ const AUTH_ERRORS = {
     LOGIN_FAILED: 'Login failed. Please check your credentials and try again.'
 };
 
+
+const validateRegister = [
+    body('name').notEmpty().withMessage('Name is required'),
+    body('email').isEmail().withMessage('Invalid email'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    body('userType').notEmpty().withMessage('User type is required'),
+    body('organization').notEmpty().withMessage('Organization is required'),
+    body('phone').notEmpty().withMessage('Phone number is required'),
+    body('phone').matches(/^[\d\+\-\(\) ]+$/).withMessage('Invalid phone number'),
+];
+
+const validateAuth = [
+    body('email').isEmail().withMessage('Invalid email'),
+    body('password').notEmpty().withMessage('Password is required'),
+];
+
+
 /**
  * Register a new user
  * @async
@@ -31,6 +51,13 @@ const AUTH_ERRORS = {
  * @returns {Promise<void>}
  */
 const register = async (req, res) => {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+
     const { name, email, password, userType, organization, phone } = req.body;
 
     try {
@@ -52,16 +79,24 @@ const register = async (req, res) => {
 
         await newUser.save();
 
-        const token = jwt.sign(
+        const accessToken = jwt.sign(
             { id: newUser._id, userType: newUser.userType },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
 
-        res.status(201).json({ token, user: newUser });
+        const refreshToken = crypto.randomBytes(40).toString('hex');
+        newUser.refreshToken = refreshToken;
+        await newUser.save();
+
+        res.status(201).json({
+             accessToken,
+             refreshToken,
+              user: newUser 
+            });
     } catch (error) {
         console.error('Error during registration:', error.message);
-        res.status(500).json({ message: AUTH_ERRORS.REGISTRATION_FAILED });
+        res.status(500).json({ message: AUTH_ERRORS.REGISTRATION_FAILED, error: error.message });
     }
 };
 
@@ -76,6 +111,12 @@ const register = async (req, res) => {
  * @returns {Promise<void>}
  */
 const login = async (req, res) => {
+        // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     const { email, password } = req.body;
 
     try {
@@ -99,19 +140,71 @@ const login = async (req, res) => {
             phone: user.phone
         };
 
-        const token = jwt.sign(
+        const accessToken = jwt.sign(
+            userForToken,
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+        
+        const refreshToken = crypto.randomBytes(40).toString('hex');
+        user.refreshToken = refreshToken;
+        await user.save();
+
+        // Return user data without password
+        const userResponse = { ...userForToken };
+        res.status(200).json({
+             accessToken,
+             refreshToken,
+              user: userResponse
+             });
+    } catch (error) {
+        console.error('Error during login:', error.message);
+        res.status(500).json({ message: AUTH_ERRORS.LOGIN_FAILED, error: error.message });
+    }
+};
+
+
+const validateRefreshToken = [
+    body('refreshToken').notEmpty().withMessage('Refresh token is required'),
+];
+
+const refreshToken = async (req, res) => {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { refreshToken } = req.body;
+
+    try {
+        const user = await User.findOne({ refreshToken });
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid refresh token' });
+        }
+
+        const userForToken = {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            userType: user.userType,
+            organization: user.organization,
+            phone: user.phone
+        };
+
+        const newAccessToken = jwt.sign(
             userForToken,
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
 
-        // Return user data without password
-        const userResponse = { ...userForToken };
-        res.status(200).json({ token, user: userResponse });
+        res.json({ accessToken: newAccessToken });
     } catch (error) {
-        console.error('Error during login:', error.message);
-        res.status(500).json({ message: AUTH_ERRORS.LOGIN_FAILED });
+        console.error('Error refreshing token:', error.message);
+        res.status(500).json({ message: 'Error refreshing token', error: error.message });
     }
 };
 
-module.exports = { register, login };
+
+
+module.exports = { register, login, validateRegister, validateLogin };

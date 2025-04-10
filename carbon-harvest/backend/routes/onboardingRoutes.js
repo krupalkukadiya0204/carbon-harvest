@@ -1,5 +1,5 @@
 const express = require('express');
-const { handleFarmerOnboarding, handleIndustryOnboarding, handleRegulatorOnboarding } = require('../controllers/onboardingController');
+const { handleFarmerOnboarding, handleIndustryOnboarding, handleRegulatorOnboarding, validateFarmerOnboarding, validateIndustryOnboarding, validateRegulatorOnboarding } = require('../controllers/onboardingController');
 const { protect: auth } = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -7,8 +7,8 @@ const router = express.Router();
 // All routes require authentication
 router.use(auth);
 
-router.post('/farmer-onboarding', handleFarmerOnboarding);
-router.post('/industry-onboarding', handleIndustryOnboarding);
-router.post('/regulator-onboarding', handleRegulatorOnboarding);
+router.post('/farmer-onboarding', validateFarmerOnboarding, handleFarmerOnboarding);
+router.post('/industry-onboarding', validateIndustryOnboarding, handleIndustryOnboarding);
+router.post('/regulator-onboarding', validateRegulatorOnboarding, handleRegulatorOnboarding);
 
 module.exports = router;

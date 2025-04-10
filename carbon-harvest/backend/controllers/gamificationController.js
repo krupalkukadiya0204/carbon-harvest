@@ -1,5 +1,6 @@
 const Achievement = require('../models/Achievement');
 const User = require('../models/User');
+const { body, validationResult } = require('express-validator');
 
 // Get user's gamification stats
 exports.getUserStats = async (req, res) => {
@@ -37,7 +38,7 @@ exports.getUserStats = async (req, res) => {
       badges: user.badges || []
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Error getting user stats', error: error.message });
   }
 };
 
@@ -47,7 +48,7 @@ exports.getUserAchievements = async (req, res) => {
     const achievements = await Achievement.find({ userId: req.user._id });
     res.json(achievements);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Error getting user achievements', error: error.message });
   }
 };
 
@@ -78,7 +79,7 @@ exports.getLeaderboard = async (req, res) => {
     ]);
     res.json(leaderboard);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Error getting leaderboard', error: error.message });
   }
 };
 
@@ -119,11 +120,25 @@ exports.updateDailyStreak = async (req, res) => {
     await achievement.save();
     res.json(achievement);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Error updating daily streak', error: error.message });
   }
 };
 
 // Create a new challenge
+exports.validateCreateChallenge = [
+  body('name').notEmpty().withMessage('Name is required'),
+  body('description').notEmpty().withMessage('Description is required'),
+  body('target').isNumeric().withMessage('Target must be a number').custom(value => value > 0).withMessage('Target must be positive'),
+  body('expiresAt').isISO8601().toDate().withMessage('ExpiresAt must be a valid date'),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  }
+];
+
 exports.createChallenge = async (req, res) => {
   try {
     const { name, description, target, expiresAt } = req.body;
@@ -142,11 +157,25 @@ exports.createChallenge = async (req, res) => {
     await challenge.save();
     res.status(201).json(challenge);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Error creating challenge', error: error.message });
   }
 };
 
 // Update challenge progress
+exports.validateUpdateChallengeProgress = [
+  body('challengeId').isMongoId().withMessage('Invalid challenge ID'),
+  body('progress').isNumeric().withMessage('Progress must be a number').custom(value => value >= 0).withMessage('Progress must be positive'),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  }
+];
+
+
+
 exports.updateChallengeProgress = async (req, res) => {
   try {
     const { challengeId, progress } = req.body;
@@ -165,11 +194,24 @@ exports.updateChallengeProgress = async (req, res) => {
     await challenge.save();
     res.json(challenge);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Error updating challenge progress', error: error.message });
   }
 };
 
 // Process referral
+exports.validateProcessReferral = [
+  body('referralCode').notEmpty().withMessage('Referral code is required'),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  }
+];
+
+
+
 exports.processReferral = async (req, res) => {
   try {
     const { referralCode } = req.body;
@@ -200,6 +242,6 @@ exports.processReferral = async (req, res) => {
     await referralAchievement.save();
     res.json(referralAchievement);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Error processing referral', error: error.message });
   }
 };

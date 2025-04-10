@@ -29,11 +29,12 @@ const creditSchema = new mongoose.Schema({
         default: 'Available'
     },
     location: {
-        state: String,
-        district: String,
-        coordinates: {
-            type: [Number],
-            index: '2dsphere'
+        address: { type: String },
+        city: { type: String },
+        state: { type: String },
+        country: { type: String },
+        pincode: {
+             type: String 
         }
     },
     sustainabilityMetrics: {
@@ -60,8 +61,7 @@ const creditSchema = new mongoose.Schema({
             ref: 'User'
         }
     }]
-}, {
-    timestamps: true
 });
 
+creditSchema.set('timestamps', true)
 module.exports = mongoose.model('Credit', creditSchema);

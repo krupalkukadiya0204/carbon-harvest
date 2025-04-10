@@ -1,5 +1,5 @@
 const express = require('express');
-const { addCredit, getCredits, buyCredit, getCreditStats } = require('../controllers/creditController');
+const { addCredit, getCredits, buyCredit, getCreditStats, validateAddCredit, validateBuyCredit } = require('../controllers/creditController');
 const { protect: authMiddleware } = require('../middleware/authMiddleware');
 const Credit = require('../models/Credit');
 
@@ -67,12 +67,12 @@ router.get('/sustainability', authMiddleware, async (req, res) => {
 });
 
 // Add a new credit
-router.post('/', authMiddleware, addCredit);
+router.post('/', authMiddleware, validateAddCredit, addCredit);
 
 // Get all credits
 router.get('/', getCredits);
 
 // Buy a credit
-router.post('/buy/:id', authMiddleware, buyCredit);
+router.post('/buy/:id', authMiddleware, validateBuyCredit, buyCredit);
 
 module.exports = router; 

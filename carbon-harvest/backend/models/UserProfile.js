@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-
+const { Schema } = mongoose;
 const farmerProfileSchema = new mongoose.Schema({
+    
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -20,15 +21,18 @@ const farmerProfileSchema = new mongoose.Schema({
         required: true
     },
     location: {
-        type: String,
-        required: true
-    },
+        address: { type: String },
+        city: { type: String },
+        state: { type: String },
+        country: { type: String },
+        pincode: { type: String },
+    },    
     sustainabilityGoals: String,
     carbonCreditsInterest: {
         type: Boolean,
         default: false
     }
-});
+}, { timestamps: true });
 
 const industryProfileSchema = new mongoose.Schema({
     userId: {
@@ -50,6 +54,13 @@ const industryProfileSchema = new mongoose.Schema({
         required: true
     },
     sustainabilityPrograms: String,
+    location: {
+        address: { type: String },
+        city: { type: String },
+        state: { type: String },
+        country: { type: String },
+        pincode: { type: String },
+    },
     carbonReductionGoals: {
         type: String,
         required: true
@@ -58,7 +69,7 @@ const industryProfileSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
-});
+}, { timestamps: true });
 
 const regulatorProfileSchema = new mongoose.Schema({
     userId: {
@@ -87,11 +98,18 @@ const regulatorProfileSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    location: {
+        address: { type: String },
+        city: { type: String },
+        state: { type: String },
+        country: { type: String },
+        pincode: { type: String },
+    },
     monitoringApproach: {
         type: String,
         required: true
     }
-});
+}, { timestamps: true });
 
 const FarmerProfile = mongoose.model('FarmerProfile', farmerProfileSchema);
 const IndustryProfile = mongoose.model('IndustryProfile', industryProfileSchema);

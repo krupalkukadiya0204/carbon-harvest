@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { FaLeaf, FaSun, FaChartLine, FaFileAlt, FaFilter, FaSearch, FaPlay } from 'react-icons/fa';
 import { IoCloud } from 'react-icons/io5';
-import VideoSection from './VideoSection';
 import './Regulations.css';
 
 /**
@@ -17,9 +16,11 @@ import './Regulations.css';
 const Regulations = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const regulations = [
     {
+      id: 'ccts',
       title: 'Carbon Credit Trading Scheme (CCTS)',
       description: 'Latest framework for carbon credit trading in agriculture and industry',
       category: 'Environment',
@@ -33,6 +34,7 @@ const Regulations = () => {
       ]
     },
     {
+      id:'bdr',
       title: 'Biological Diversity Rules',
       description: 'Updated framework for biodiversity conservation and sustainable use',
       category: 'Environment',
@@ -46,6 +48,7 @@ const Regulations = () => {
       ]
     },
     {
+      id: 'emr',
       title: 'Eco-mark Rules',
       description: 'Environmental product certification and labeling system',
       category: 'Environment',
@@ -59,6 +62,7 @@ const Regulations = () => {
       ]
     },
     {
+      id: 'ncap',
       title: 'National Clean Air Programme (NCAP)',
       description: 'Comprehensive air quality management initiative',
       category: 'Environment',
@@ -72,6 +76,7 @@ const Regulations = () => {
       ]
     },
     {
+      id: 'gcp',
       title: 'Green Credit Programme',
       description: 'Market mechanism for environmental actions',
       category: 'Environment',
@@ -85,6 +90,7 @@ const Regulations = () => {
       ]
     },
     {
+      id: 'act',
       title: 'Agricultural Carbon Trading',
       description: 'Carbon trading mechanisms for agricultural sector',
       category: 'Agriculture',
@@ -98,6 +104,7 @@ const Regulations = () => {
       ]
     },
     {
+      id: 'pks',
       title: 'PM-KUSUM Scheme',
       description: 'Solar energy integration in agriculture',
       category: 'Agriculture/Energy',
@@ -111,6 +118,7 @@ const Regulations = () => {
       ]
     },
     {
+      id:'eca',
       title: 'Energy Conservation Act',
       description: 'Amended framework for energy efficiency and carbon markets',
       category: 'Agriculture/Energy',
@@ -124,6 +132,7 @@ const Regulations = () => {
       ]
     },
     {
+      id: 'mi',
       title: 'MISHTI Initiative',
       description: 'Mangrove Initiative for Shoreline Habitats & Tangible Incomes',
       category: 'Environment',
@@ -137,6 +146,7 @@ const Regulations = () => {
       ]
     },
     {
+      id: 'isfr',
       title: 'India State of Forest Report',
       description: 'National forest cover assessment and monitoring',
       category: 'Environment',
@@ -151,6 +161,7 @@ const Regulations = () => {
     }
   ];
 
+  // List of categories
   const categories = ['all', 'Agriculture', 'Environment', 'Agriculture/Energy'];
 
   const filteredRegulations = regulations.filter(reg => {
@@ -182,24 +193,42 @@ const Regulations = () => {
   };
 
   return (
-    <div className="regulations-container">
-      {/* Header Section */}
-      <div className="regulations-header">
-        <h1>Indian Agricultural & Environmental Regulations</h1>
-        <p>Comprehensive guide to policies and schemes promoting sustainable agriculture and environmental protection</p>
-      </div>
-      
-      {/* Video Section */}
-      <div className="video-section-wrapper">
-        <div className="video-section-header">
-          <FaPlay className="play-icon" />
-          <h2>Understanding Carbon Credit Regulations</h2>
+    <section className="regulations-page">
+      {/* Main Header */}
+      <header className="page-header">
+        <div className="container">
+          <div className="page-header-content">
+            <h1>
+              <span className="highlight">Empowering Change</span> Through Regulations
+            </h1>
+            <p>
+              Explore the policies and initiatives shaping sustainable agriculture and environmental stewardship in India. Understand how these regulations drive positive change, support farmers, and protect our environment.
+            </p>
+          </div>
         </div>
-        <VideoSection />
-      </div>
+      </header>
 
-      {/* Regulations Content */}
-      <div className="regulations-content">
+      {/* Regulations Overview Section */}
+      <section className="overview-section">
+        <div className="container">
+          <div className="overview-content">
+            <h2>Navigating the Regulatory Landscape</h2>
+            <p>
+              India's commitment to sustainable development is reflected in its comprehensive regulations for agriculture and environmental protection. From carbon credit trading schemes to biodiversity conservation, these policies are designed to promote responsible practices and ensure a sustainable future.
+            </p>
+            <p>
+              Our platform provides a clear overview of key regulations, helping farmers, industries, and regulators stay informed and comply with the latest standards. Explore the details below to understand the scope and benefits of each regulation.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Regulations Content Section */}
+      <section className="regulations-content-section">
+        <div className="container">
+
+        {/* Filters */}
+        <div className="regulations-content">
           <div className="regulations-filters">
             <div className="search-bar">
               <FaSearch className="search-icon" />
@@ -209,19 +238,21 @@ const Regulations = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
+               
             </div>
 
-            <div className="category-filters">
-              <FaFilter className="filter-icon" />
-              {categories.map(category => (
-                <button
-                  key={category}
-                  className={`category-btn ${activeCategory === category ? 'active' : ''}`}
-                  onClick={() => setActiveCategory(category)}
-                >
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
-                </button>
-              ))}
+             {/* Category Filters */}
+            <div className={`category-filters ${isFilterOpen ? 'open' : ''}`}>
+            <FaFilter className="filter-icon" onClick={() => setIsFilterOpen(!isFilterOpen)} />
+              {isFilterOpen && (
+                <div className="category-buttons">
+                  {categories.map(category => (
+                    <button key={category} className={`category-btn ${activeCategory === category ? 'active' : ''}`} onClick={() => setActiveCategory(category)}>
+                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -232,33 +263,39 @@ const Regulations = () => {
             animate="visible"
           >
             {filteredRegulations.map((regulation, index) => (
-              <motion.div
-                key={index}
-                className="regulation-card"
-                variants={itemVariants}
-              >
-                <div className="regulation-icon">{regulation.icon}</div>
-                <div className="regulation-content">
-                  <h3>{regulation.title}</h3>
+               <motion.div key={index} className="regulation-card" variants={itemVariants} whileHover={{ scale: 1.03 }} transition={{ type: "spring", stiffness: 300 }}>
+                 <div className="regulation-card-header">
+                  <div className="regulation-icon">{regulation.icon}</div>
+                  <div className="regulation-title-container">
+                    <h3 className="regulation-title">{regulation.title}</h3>
+                  </div>
+                 </div>
+                 <div className="regulation-card-content">
                   <p className="regulation-description">{regulation.description}</p>
                   <div className="regulation-meta">
-                    <span className="category">{regulation.category}</span>
-                    <span className="year">Year: {regulation.year}</span>
+                    <span className="category"><span className="bold">Category:</span> {regulation.category}</span>
+                    <span className="year"><span className="bold">Year:</span> {regulation.year}</span>
                   </div>
                   <div className="regulation-details">
-                    <h4>Key Points:</h4>
-                    <ul>
-                      {regulation.details.map((detail, idx) => (
-                        <li key={idx}>{detail}</li>
-                      ))}
+                    <h4 className="details-title">Key Points:</h4>
+                    <ul className="details-list">
+                    {regulation.details.map((detail, idx) => (
+                       <li key={idx} className="detail-item">{detail}</li>
+                     ))}
                     </ul>
+                   </div>
+                   
+                  
                   </div>
                 </div>
               </motion.div>
             ))}
           </motion.div>
       </div>
+      </div>
+      </section>
     </div>
+    </section>
   );
 };
 

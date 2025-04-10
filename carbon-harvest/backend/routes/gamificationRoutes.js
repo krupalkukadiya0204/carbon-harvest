@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { protect: auth } = require('../middleware/authMiddleware');
 const gamificationController = require('../controllers/gamificationController');
+const { validateCreateChallenge, validateUpdateChallengeProgress, validateProcessReferral } = gamificationController;
 
 // Get user stats
 router.get('/stats', auth, gamificationController.getUserStats);
@@ -16,12 +17,12 @@ router.get('/leaderboard', auth, gamificationController.getLeaderboard);
 router.post('/streak', auth, gamificationController.updateDailyStreak);
 
 // Create new challenge
-router.post('/challenge', auth, gamificationController.createChallenge);
+router.post('/challenge', auth, validateCreateChallenge, gamificationController.createChallenge);
 
 // Update challenge progress
-router.put('/challenge/progress', auth, gamificationController.updateChallengeProgress);
+router.put('/challenge/progress', auth, validateUpdateChallengeProgress, gamificationController.updateChallengeProgress);
 
 // Process referral
-router.post('/referral', auth, gamificationController.processReferral);
+router.post('/referral', auth, validateProcessReferral, gamificationController.processReferral);
 
 module.exports = router;

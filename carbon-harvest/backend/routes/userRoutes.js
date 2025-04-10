@@ -1,5 +1,5 @@
 const express = require('express');
-const { getUsers, verifyUser, updateProfile, getUserProfile } = require('../controllers/userController');
+const { getUsers, verifyUser, updateProfile, getUserProfile, validateUpdateProfile } = require('../controllers/userController');
 const { protect: authMiddleware } = require('../middleware/authMiddleware');
 const multer = require('multer');
 const path = require('path');
@@ -34,7 +34,7 @@ router.get('/', authMiddleware, getUsers);
 router.get('/profile', authMiddleware, getUserProfile);
 
 // Update user profile
-router.put('/profile', authMiddleware, upload.single('profilePicture'), updateProfile);
+router.put('/profile', authMiddleware, upload.single('profilePicture'), validateUpdateProfile, updateProfile);
 
 // Verify a user
 router.post('/verify/:id', authMiddleware, verifyUser);

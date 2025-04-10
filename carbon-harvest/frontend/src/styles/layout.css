@@ -1,59 +1,87 @@
-/* Global Layout Styles */
+/* Layout Base Variables */
 :root {
-  --content-padding-x: clamp(1rem, 5vw, 2rem);
+  --content-padding-x: 1rem; /* Base padding for content */
   --content-max-width: 1440px;
-  --section-margin: calc(-50vw + 50%);
+  --section-margin: -1rem; /* Default margin for sections */
+  --section-margin-mobile: -0.5rem;
+  --section-padding-y: 4rem;
+  --section-padding-y-mobile: 2rem;
+  --grid-gap: 1rem;
+  --grid-gap-mobile: 0.5rem;
+
 }
 
-/* Full-width container that breaks out of parent constraints */
+/* ============================================ */
+/* Full-Width Container */
+/* ============================================ */
+
 .full-width-container {
-  width: 100vw;
-  margin-left: var(--section-margin);
-  margin-right: var(--section-margin);
-  padding: 0;
+  width: 100%;
+  margin-left: calc(var(--section-margin) + 0px); /* Add 0px to ensure it's treated as a calculation */
+  margin-right: calc(var(--section-margin) + 0px);
+  padding: 0 var(--content-padding-x);
   position: relative;
-  left: 50%;
-  right: 50%;
-  transform: translateX(-50%);
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    margin-left: calc(var(--section-margin-mobile) + 0px);
+    margin-right: calc(var(--section-margin-mobile) + 0px);
+  }
 }
 
-/* Content container with consistent padding */
+/* ============================================ */
+/* Content Container */
+/* ============================================ */
+
 .content-container {
   width: 100%;
   max-width: var(--content-max-width);
   margin: 0 auto;
   padding: 0 var(--content-padding-x);
   box-sizing: border-box;
+  
+  @media (max-width: 768px){
+    padding: 0 calc(var(--content-padding-x) * 0.75);
+
+  }
+  @media (max-width: 480px) {
+    padding: 0 calc(var(--content-padding-x) * 0.5);
+
+  }
 }
 
-/* Full-bleed section that maintains content width */
+/* ============================================ */
+/* Full-Bleed Section */
+/* ============================================ */
+
 .full-bleed-section {
-  width: 100vw;
-  margin-left: var(--section-margin);
-  margin-right: var(--section-margin);
-  padding: 3rem 0;
+  width: 100%;
+  margin-left: calc(var(--section-margin) + 0px); /* Add 0px to ensure it's treated as a calculation */
+  margin-right: calc(var(--section-margin) + 0px);
+  padding: var(--section-padding-y) 0;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  box-sizing: border-box;
+  @media (max-width: 768px) {
+    margin-left: calc(var(--section-margin-mobile) + 0px);
+    margin-right: calc(var(--section-margin-mobile) + 0px);
+    padding: var(--section-padding-y-mobile) 0;
+  }
 }
 
 .full-bleed-section > * {
   width: 100%;
   max-width: var(--content-max-width);
   padding: 0 var(--content-padding-x);
+
   box-sizing: border-box;
 }
-
 /* Responsive adjustments */
-@media (max-width: 768px) {
-  :root {
-    --content-padding-x: 1rem;
-  }
-}
-
 @media (max-width: 480px) {
   :root {
-    --content-padding-x: 0.75rem;
+      --content-padding-x: 0.75rem;
+    
   }
 }

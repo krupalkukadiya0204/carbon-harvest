@@ -1,186 +1,64 @@
-const mongoose = require("mongoose");
+/**
+ * @file User Model - Defines the Mongoose schema for user data
+ */
 
+const mongoose = require('mongoose');
+const validator = require('validator');
+
+/**
+ * User Schema - Defines the structure of a user document in MongoDB
+ * @type {mongoose.Schema}
+ */
 const userSchema = new mongoose.Schema({
-    // Basic Information
     name: {
         type: String,
-        required: true
+        required: [true, 'Please provide your name'],
+        trim: true,
+        maxlength: [50, 'Name must be less than 50 characters']
     },
     email: {
         type: String,
-        required: true,
-        unique: true
+        required: [true, 'Please provide your email'],
+        unique: true,
+        lowercase: true,
+        validate: [validator.isEmail, 'Please provide a valid email']
     },
     password: {
         type: String,
-        required: true
+        required: [true, 'Please provide a password'],
+        minlength: [8, 'Password must be at least 8 characters']
     },
     userType: {
         type: String,
-        required: true,
-        enum: ["Farmer", "Industry", "Regulator"]
-    },
-    
-    // Profile Information
-    profilePicture: {
-        type: String,
-        default: ""
+        required: [true, 'Please provide a user type'],
+        enum: ['farmer', 'industry', 'regulator']
     },
     organization: {
         type: String,
-        default: ""
+        trim: true
     },
     phone: {
         type: String,
-        default: ""
+        trim: true
     },
-    
-    // Address Information
-    address: {
+    location: {
         type: String,
-        required: function() {
-            return this.onboardingStatus === "completed";
-        }
+        default:""
     },
-    city: {
-        type: String,
-        required: function() {
-            return this.onboardingStatus === "completed";
-        }
+        address: { type: String },
+        city: { type: String },
+        state: { type: String },
+        country: { type: String },
+        pincode: { type: String },
     },
-    state: {
-        type: String,
-        required: function() {
-            return this.onboardingStatus === "completed";
-        }
+        settings: {
+        emailNotifications: { type: Boolean, default: true },
+        smsNotifications: { type: Boolean, default: false },
+        language: { type: String, default: "en" },
+        theme: { type: String, default: "light" },
+        twoFactorAuth: { type: Boolean, default: false },
     },
-    country: {
-        type: String,
-        required: function() {
-            return this.onboardingStatus === "completed";
-        }
-    },
-    pincode: {
-        type: String,
-        required: function() {
-            return this.onboardingStatus === "completed";
-        }
-    },
-    
-    // Banking Information
-    bankName: {
-        type: String,
-        required: function() {
-            return this.onboardingStatus === "completed";
-        }
-    },
-    accountNumber: {
-        type: String,
-        required: function() {
-            return this.onboardingStatus === "completed";
-        }
-    },
-    ifscCode: {
-        type: String,
-        required: function() {
-            return this.onboardingStatus === "completed";
-        }
-    },
-    
-    // Legal Information
-    panNumber: {
-        type: String,
-        required: function() {
-            return this.onboardingStatus === "completed";
-        }
-    },
-    gstNumber: {
-        type: String,
-        required: function() {
-            return this.userType === "Industry" && this.onboardingStatus === "completed";
-        }
-    },
-    
-    // Farmer Specific Fields
-    farmSize: {
-        type: String,
-        required: function() {
-            return this.userType === "Farmer" && this.onboardingStatus === "completed";
-        }
-    },
-    farmType: {
-        type: String,
-        required: function() {
-            return this.userType === "Farmer" && this.onboardingStatus === "completed";
-        }
-    },
-    cropTypes: {
-        type: String,
-        required: function() {
-            return this.userType === "Farmer" && this.onboardingStatus === "completed";
-        }
-    },
-    
-    // Industry Specific Fields
-    certifications: {
-        type: String,
-        required: function() {
-            return this.userType === "Industry" && this.onboardingStatus === "completed";
-        }
-    },
-    
-    // Status and Verification
-    onboardingStatus: {
-        type: String,
-        enum: ["pending", "completed", "bypassed"],
-        default: "pending"
-    },
-    verified: { 
-        type: Boolean,
-        default: false
-    },
-    preVerified: {
-        type: Boolean,
-        default: false
-    },
-    
-    // Settings
-    settings: {
-        emailNotifications: {
-            type: Boolean,
-            default: true
-        },
-        smsNotifications: {
-            type: Boolean,
-            default: true
-        },
-        language: {
-            type: String,
-            enum: ["en", "hi", "mr"],
-            default: "en"
-        },
-        theme: {
-            type: String,
-            enum: ["light", "dark"],
-            default: "light"
-        },
-        twoFactorAuth: {
-            type: Boolean,
-            default: false
-        }
-    },
-    
-    // Gamification
-    points: {
-        type: Number,
-        default: 0
-    },
-    level: {
-        type: Number,
-        default: 1
-    }
-}, {
-    timestamps: true
-});
+    refreshToken: { type: String }
+}, { timestamps: true }); // Add timestamps here
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model('User', userSchema);

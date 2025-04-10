@@ -35,7 +35,7 @@ const Footer = () => {
     },
     quickLinks: [
       { title: 'Home', url: '/' },
-      { title: 'About', url: '/about' },
+      { title: 'About', url: '/about-us' },
       { title: 'Farmers Portal', url: '/farmer-dashboard' },
       { title: 'Industry Portal', url: '/industry-dashboard' },
       { title: 'Regulators Portal', url: '/regulator-dashboard' }

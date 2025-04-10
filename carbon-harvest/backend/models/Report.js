@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const reportSchema = new mongoose.Schema({
+const reportSchema = new mongoose.Schema({  
     type: {
         type: String,
         required: true,
@@ -25,11 +25,9 @@ const reportSchema = new mongoose.Schema({
     data: {
         type: mongoose.Schema.Types.Mixed,
         required: true
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
     }
+}, {
+    timestamps: true
 });
 
 // Add indexes for better query performance

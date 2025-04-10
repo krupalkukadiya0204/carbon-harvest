@@ -21,18 +21,14 @@ const siteSettingsSchema = new mongoose.Schema({
         platform: String,
         url: String,
         icon: String
-    }],
-    quickLinks: [{
-        title: String,
-        url: String
-    }],
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
+    }]
 }, {
     timestamps: true
 });
+    quickLinks: [{
+        title: String,
+        url: String
+    }
 
 
 

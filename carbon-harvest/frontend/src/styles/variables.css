@@ -1,194 +1,104 @@
-/*====================================================
-  DESIGN SYSTEM - CARBON HARVEST
-====================================================*/
-
 :root {
-  /* Primary Colors */
-  --color-primary: #2E7D32;
-  --color-primary-light: #4CAF50;
-  --color-primary-dark: #1B5E20;
-  --color-primary-transparent: rgba(46, 125, 50, 0.1);
+  /* ==========================================================================
+     Colors
+     ========================================================================== */
 
-  /* Secondary Colors */
-  --color-secondary: #1565C0;
-  --color-secondary-light: #1E88E5;
-  --color-secondary-dark: #0D47A1;
+  /* Primary Color Palette (Greens) */
+  --color-primary-lightest: #ecfdf5; /* Primary 50 */
+  --color-primary-lighter: #d1fae5; /* Primary 100 */
+  --color-primary-light: #a7f3d0; /* Primary 200 */
+  --color-primary-medium-light: #6ee7b7; /* Primary 300 */
+  --color-primary-medium: #34d399; /* Primary 400 */
+  --color-primary-base: #10b981; /* Primary 500 */
+  --color-primary-medium-dark: #059669; /* Primary 600 */
+  --color-primary-dark: #047857; /* Primary 700 */
+  --color-primary-darker: #065f46; /* Primary 800 */
+  --color-primary-darkest: #064e3b; /* Primary 900 */
 
-  /* Accent Colors */
-  --color-accent: #FF6D00;
-  --color-accent-light: #FF9E40;
-  --color-accent-dark: #E65100;
+  /* Neutral Color Palette (Grays) */
+  --color-neutral-lightest: #fafafa; /* Neutral 50 */
+  --color-neutral-lighter: #f4f4f5; /* Neutral 100 */
+  --color-neutral-light: #e4e4e7; /* Neutral 200 */
+  --color-neutral-medium-light: #d4d4d8; /* Neutral 300 */
+  --color-neutral-medium: #a1a1aa; /* Neutral 400 */
+  --color-neutral-base: #71717a; /* Neutral 500 */
+  --color-neutral-medium-dark: #52525b; /* Neutral 600 */
+  --color-neutral-dark: #3f3f46; /* Neutral 700 */
+  --color-neutral-darker: #27272a; /* Neutral 800 */
+  --color-neutral-darkest: #18181b; /* Neutral 900 */
 
-  /* Neutral Colors */
-  --color-background: #FFFFFF;
-  --color-surface: #F8F9FA;
-  --color-text-primary: #212121;
-  --color-text-secondary: #424242;
-  --color-text-tertiary: #757575;
-  --color-border: #E0E0E0;
+  /* ==========================================================================
+     Typography
+     ========================================================================== */
 
-  /* Success/Error Colors */
-  --color-success: #43A047;
-  --color-error: #D32F2F;
-  --color-warning: #FFA000;
-  --color-info: #1976D2;
+  /* Font Families */
+  --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; /* Used for main text */
+  --font-family-secondary: 'Plus Jakarta Sans', sans-serif; /* Used for headings and callouts */
 
-  /* Spacing */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-xxl: 3rem;
-
-  /* Typography */
-  --font-family-primary: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-family-heading: 'Poppins', var(--font-family-primary);
-  
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 2rem;
-  --font-size-4xl: 2.5rem;
-
-  /* Line Heights */
-  --line-height-tight: 1.2;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.75;
-
-  /* Border Radius */
-  --border-radius-sm: 0.25rem;
-  --border-radius-md: 0.5rem;
-  --border-radius-lg: 1rem;
-  --border-radius-full: 9999px;
-
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-
-  /* Transitions */
-  --transition-fast: 150ms ease-in-out;
-  --transition-normal: 250ms ease-in-out;
-  --transition-slow: 350ms ease-in-out;
-
-  /* Z-index */
-  --z-index-dropdown: 1000;
-  --z-index-sticky: 1020;
-  --z-index-fixed: 1030;
-  --z-index-modal: 1040;
-  --z-index-popover: 1050;
-  --z-index-tooltip: 1060;
-  /* Typography */
-  --font-family-primary: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-family-heading: 'Poppins', var(--font-family-primary);
-  
   /* Font Sizes */
-  --text-xs: 0.75rem;   /* 12px */
-  --text-sm: 0.875rem;  /* 14px */
-  --text-base: 1rem;    /* 16px */
-  --text-lg: 1.125rem;  /* 18px */
-  --text-xl: 1.25rem;   /* 20px */
-  --text-2xl: 1.5rem;   /* 24px */
-  --text-3xl: 1.875rem; /* 30px */
-  --text-4xl: 2.25rem;  /* 36px */
-  --text-5xl: 3rem;     /* 48px */
-  
-  /* Font Weights */
-  --font-light: 300;
-  --font-normal: 400;
-  --font-medium: 500;
-  --font-semibold: 600;
-  --font-bold: 700;
-  --font-extrabold: 800;
+  --font-size-xs: 0.75rem; /* Extra small */
+  --font-size-sm: 0.875rem; /* Small */
+  --font-size-base: 1rem; /* Base/Default */
+  --font-size-lg: 1.125rem; /* Large */
+  --font-size-xl: 1.25rem; /* Extra large */
+  --font-size-2xl: 1.5rem; /* 2x extra large */
+  --font-size-3xl: 1.875rem; /* 3x extra large */
+  --font-size-4xl: 2.25rem; /* 4x extra large */
 
-  /* Layout */
-  --max-width: 1440px;
-  --min-width: 320px;
-  --container-padding: 1rem;
-  --section-spacing: 6rem;
-  --grid-gap: 2rem;
-  
-  /* Nature-Inspired Color Palette */
-  --leaf-green-50: #F3FAF3;
-  --leaf-green-100: #DCF5DC;
-  --leaf-green-500: #4CAF50;
-  --leaf-green-600: #2E7D32;
-  --leaf-green-700: #1B5E20;
-  
-  --sky-blue-50: #E3F2FD;
-  --sky-blue-100: #BBDEFB;
-  --sky-blue-500: #03A9F4;
-  --sky-blue-600: #0288D1;
-  --sky-blue-700: #01579B;
-  
-  --earth-brown-50: #EFEBE9;
-  --earth-brown-100: #D7CCC8;
-  --earth-brown-500: #795548;
-  --earth-brown-600: #5D4037;
-  --earth-brown-700: #3E2723;
-  
-  --sunset-orange-500: #FF5722;
-  --sunrise-yellow-500: #FFB300;
-  
-  /* Neutral Colors */
-  --neutral-50: #FAFAFA;
-  --neutral-100: #F5F5F5;
-  --neutral-200: #EEEEEE;
-  --neutral-300: #E0E0E0;
-  --neutral-400: #BDBDBD;
-  --neutral-500: #9E9E9E;
-  --neutral-600: #757575;
-  --neutral-700: #616161;
-  --neutral-800: #424242;
-  --neutral-900: #212121;
-  
-  /* Semantic Colors */
-  --text-primary: var(--neutral-900);
-  --text-secondary: var(--neutral-700);
-  --text-tertiary: var(--neutral-500);
-  --text-inverse: var(--neutral-50);
-  
-  --background-primary: var(--neutral-50);
-  --background-secondary: var(--neutral-100);
-  --background-tertiary: var(--neutral-200);
-  
-  /* Effects */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  
-  /* Border Radius */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
-  --radius-2xl: 1rem;
-  --radius-full: 9999px;
-  
-  /* Z-Index */
-  --z-negative: -1;
-  --z-elevate: 1;
-  --z-sticky: 100;
-  --z-drawer: 200;
-  --z-modal: 300;
-  --z-popover: 400;
-  --z-toast: 500;
-  
-  /* Transitions */
-  --transition-all: all 0.3s ease;
-  --transition-transform: transform 0.3s ease;
-  --transition-opacity: opacity 0.3s ease;
-  --transition-colors: background-color 0.3s ease, border-color 0.3s ease;
-  
-  /* Breakpoints */
-  --breakpoint-sm: 640px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 1024px;
-  --breakpoint-xl: 1280px;
-  --breakpoint-2xl: 1536px;
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ==========================================================================
+     Spacing
+     ========================================================================== */
+  --space-xs: 0.25rem; /* Extra small spacing */
+  --space-sm: 0.5rem; /* Small spacing */
+  --space-md: 1rem; /* Medium spacing */
+  --space-lg: 1.5rem; /* Large spacing */
+  --space-xl: 2rem; /* Extra large spacing */
+  --space-2xl: 3rem; /* 2x extra large spacing */
+  --space-3xl: 4rem; /* 3x extra large spacing */
+
+  /* ==========================================================================
+     Layout
+     ========================================================================== */
+
+  --layout-header-height: 4rem; /* Height of the main header */
+  --layout-container-max-width: 1280px; /* Maximum width of the main content container */
+  --layout-sidebar-width: 280px; /* Width of the sidebar */
+
+  /* ==========================================================================
+     Border Radius
+     ========================================================================== */
+  --border-radius-sm: 0.25rem; /* Small border radius */
+  --border-radius-md: 0.375rem; /* Medium border radius */
+  --border-radius-lg: 0.5rem; /* Large border radius */
+  --border-radius-xl: 0.75rem; /* Extra large border radius */
+  --border-radius-2xl: 1rem; /* 2x extra large border radius */
+  --border-radius-full: 9999px; /* Full rounded border radius (pill shape) */
+
+  /* ==========================================================================
+     Shadows
+     ========================================================================== */
+  --box-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05); /* Small shadow */
+  --box-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* Medium shadow */
+  --box-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* Large shadow */
+
+  /* ==========================================================================
+    Z-index
+    ========================================================================== */
+  --z-index-header: 50; /* Z-index for the header */
+  --z-index-modal: 100; /* Z-index for modals */
+  --z-index-tooltip: 150; /* Z-index for tooltips */
+
+  /* ==========================================================================
+    Transitions
+    ========================================================================== */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1); /* Fast transition */
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1); /* Normal transition */
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1); /* Slow transition */
 }

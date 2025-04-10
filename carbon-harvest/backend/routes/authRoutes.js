@@ -1,12 +1,14 @@
 const express = require('express');
-const { register, login } = require('../controllers/authController');
+const { register, login, validateRegister, validateLogin, refreshToken, validateRefreshToken } = require('../controllers/authController');
 
 const router = express.Router();
 
 // Register a new user
-router.post('/register', register);
+const routes = [
+  router.post('/register', validateRegister, register),
 
-// Login an existing user
-router.post('/login', login);
+  // Login an existing user
+  router.post('/login', validateLogin, login),
+  router.post('/refresh', validateRefreshToken, refreshToken)
+];
 
-module.exports = router; 
