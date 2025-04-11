@@ -1,6 +1,6 @@
 .marketplace-preview {
   padding: 6rem 0;
-  background-color: #f8f9fa;
+  background-color: #f8f9fa;  
 }
 
 .marketplace-preview-content {
@@ -159,22 +159,4 @@
 
 .btn-secondary:hover {
   background: #e9ecef;
-}
-
-@media (max-width: 768px) {
-  .marketplace-preview {
-    padding: 4rem 0;
-  }
-
-  .section-header h2 {
-    font-size: 2rem;
-  }
-
-  .marketplace-cards {
-    grid-template-columns: 1fr;
-  }
-
-  .card-image {
-    height: 180px;
-  }
 }

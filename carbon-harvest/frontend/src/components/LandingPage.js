@@ -23,7 +23,7 @@ const LandingPage = () => {
 
             {/* How It Works Section */}
             <section className="how-it-works-section">
-                <div className="container">
+                <div className="desktop-container">
                     <h2 className="section-title">How It Works</h2>
                     <div className='section-content'>
                         <p>
@@ -35,7 +35,7 @@ const LandingPage = () => {
 
             {/* Our Impact Section */}
             <section className="our-impact-section">
-                <div className="container">
+                <div className="desktop-container">
                     <h2 className="section-title">Our Impact</h2>
                     <div className='section-content'>
                         <p>
@@ -46,7 +46,7 @@ const LandingPage = () => {
             </section>
             {/* Visuals Section */}
             <section className="visuals-section">
-                <div className="container">
+                <div className="desktop-container">
                     <img src={hero} alt="Carbon Harvest Hero" className="full-width-image" />
                 </div>
             </section>
@@ -54,15 +54,15 @@ const LandingPage = () => {
             <AboutPreview />
             <ProjectsShowcase />
             {/* Join the Movement Section */}
-            <section className="join-movement-section" style={{ backgroundImage: `url(${joinUs})` }}>
-                <div className="container">
+            <section className="join-movement-section desktop-container" style={{ backgroundImage: `url(${joinUs})` }}>
+                <div >
                     <h2 className="section-title">Join the Movement</h2>
                     <p className='section-content'>Be part of the solution. Register with CarbonHarvest and start making a difference today.</p>
-                    <Link to="/register" className="btn btn-primary">Register Now</Link>
+                    <Link to="/register" className="register-button">Register Now</Link>
                 </div>
             </section>
             {/* Our Partners Section */}
-            <section className="our-partners-section"><div className="container"> <h2 className="section-title">Our Partners</h2>
+            <section className="our-partners-section"><div className="desktop-container"> <h2 className="section-title">Our Partners</h2>
                     <p className='section-content'>We collaborate with leading organizations and experts to drive innovation in sustainable agriculture and carbon trading.</p></div></section>
             <ContactForm />
         </div>

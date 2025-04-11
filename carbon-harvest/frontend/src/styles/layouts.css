@@ -103,20 +103,3 @@
   background: var(--gradient-light);
   opacity: 0.5;
 }
-
-/*====================================================
-  RESPONSIVE STYLES
-====================================================*/
-@media (max-width: 1024px) {
-  .dashboard-main {
-    padding: calc(var(--section-spacing) * 0.8) var(--container-padding);
-  }
-  .page-content {
-    padding: calc(var(--section-spacing) * 0.8) var(--container-padding);
-  }
-}
-@media (max-width: 768px) {
-  .page-content, .dashboard-main {
-    padding: calc(var(--section-spacing) * 0.6) var(--container-padding);
-  }
-}

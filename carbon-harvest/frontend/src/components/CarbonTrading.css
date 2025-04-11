@@ -206,30 +206,3 @@
     border-radius: var(--radius-md);
     margin-top: var(--spacing-xl);
 }
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .carbon-trading-page {
-        padding: var(--spacing-xl) var(--spacing-md);
-    }
-
-    .trading-hero h1 {
-        font-size: 2rem;
-    }
-
-    .trading-hero p {
-        font-size: 1rem;
-    }
-
-    .stats-grid,
-    .process-steps,
-    .benefits-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .stat-card,
-    .step,
-    .benefit-card {
-        transform: none !important;
-    }
-}

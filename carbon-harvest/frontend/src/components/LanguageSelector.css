@@ -40,16 +40,6 @@
   padding: var(--spacing-sm);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .language-selector {
-    position: fixed;
-    top: auto;
-    bottom: var(--spacing-lg);
-    right: var(--spacing-lg);
-  }
-}
-
 /* Dark Mode Support */
 [data-theme='dark'] .language-selector {
   background: var(--glass-background-dark);

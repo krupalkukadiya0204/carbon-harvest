@@ -1,22 +1,18 @@
 .not-found {
-    text-align: center;
-    margin-top: 50px;
+  text-align: center;
+  margin-top: 50px;
 }
 
 .not-found h1 {
-    font-size: 2rem;
-    color: #ff0000;
+  font-size: 2rem;
+  color: #ff0000;
 }
 
 .not-found p {
-    font-size: 1.2rem;
+  font-size: 1.2rem;
 }
 
 .not-found a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.not-found a:hover {
-    text-decoration: underline;
+  color: #007bff;
+  text-decoration: none;
 }

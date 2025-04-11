@@ -126,39 +126,5 @@
   background-color: var(--neutral-200);
 }
 
-/*====================================================
-  RESPONSIVE STYLES
-====================================================*/
-@media (max-width: 992px) {
-  .header-nav,
-  .dashboard-header .header-nav {
-    position: fixed;
-    top: var(--header-height);
-    left: 0;
-    width: 100%;
-    height: calc(100vh - var(--header-height));
-    flex-direction: column;
-    background-color: var(--header-bg);
-    padding: var(--space-6);
-    box-shadow: var(--shadow-md);
-    transform: translateX(100%);
-    transition: transform var(--header-transition);
-    overflow-y: auto;
-    z-index: -1;
-    align-items: start;
-    justify-content: flex-start;
-    gap:var(--space-4)
-  }
 
-  .header-nav.active,
-  .dashboard-header .header-nav.active {
-    transform: translateX(0);
-    z-index: 100;
-  }
-}
 
-@media (max-width: 768px) {
-  .header-logo{
-    font-size: 1.5rem;
-  }
-}

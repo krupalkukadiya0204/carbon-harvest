@@ -1,13 +1,16 @@
 /**
  * @file User Controller - Handles user management operations
+ * @requires module:../server
  */
 const { getAsync, setAsync, client } = require('../server');
 const ActivityLog = require('../models/ActivityLog');
 
 const User = require('../models/User');
-
+const BlockchainService = require('../blockchain/blockchainService');
 const xss = require('xss-clean');
 const { body, validationResult } = require('express-validator');
+
+const {authenticate} = require('../middleware/authMiddleware');
 
 /**
  * Error messages for user operations
@@ -22,6 +25,7 @@ const USER_ERRORS = {
     VERIFY_FAILED: 'Failed to verify user. Please try again later.',
     UPDATE_FAILED: 'Failed to update profile. Please try again later.',
     UNAUTHORIZED: 'You are not authorized to perform this action.'
+    
 };
 
 /**
@@ -32,12 +36,14 @@ const USER_ERRORS = {
  * @returns {Promise<void>}
  */
 const getUsers = async (req, res) => {
+    // Verify if the user is authenticated and authorized
+    if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).json({ message: USER_ERRORS.UNAUTHORIZED }); // 403 Forbidden
+    }
     // Sanitize inputs
     req.body = xss(req.body);
     req.query = xss(req.query);
     req.params = xss(req.params);
-
-    try {
 
         const users = await User.find();
         res.status(200).json(users);
@@ -52,7 +58,7 @@ const getUsers = async (req, res) => {
             console.error('Error fetching users:', error);
         }
     }
-}; 
+};
 
 /**
  *
@@ -69,6 +75,10 @@ const getUsers = async (req, res) => {
  * @returns {Promise<void>}
  */
 const verifyUser = async (req, res) => {
+    // Verify if the user is authenticated and authorized
+    if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).json({ message: USER_ERRORS.UNAUTHORIZED }); // 403 Forbidden
+    }
     const userId = req.params.id;
     // Sanitize inputs
     req.body = xss(req.body);
@@ -109,6 +119,10 @@ const verifyUser = async (req, res) => {
  * @returns {Promise<void>}
  */
 const getUserProfile = async (req, res) => {
+    // Verify if the user is authenticated and authorized
+    if (!req.user) {
+        return res.status(403).json({ message: USER_ERRORS.UNAUTHORIZED }); // 403 Forbidden
+    }
     // Sanitize inputs
     req.body = xss(req.body);
     req.query = xss(req.query);
@@ -176,18 +190,21 @@ const updateProfileValidation = [
     body('location.pincode').optional().notEmpty().withMessage('Location pincode is required'),
     (req, res, next) => {
         const errors = validationResult(req);
+        //check if the is error
         if (!errors.isEmpty()) {
             return res.status(400).json({ message: 'Validation failed', errors: errors.array() });
         }
         next();
     },
 ];
-const updateProfile = [updateProfileValidation,async (req, res) => {
+// Update the user profile
+const updateProfile = [updateProfileValidation, async (req, res) => {
   try {
       // Sanitize inputs
     req.body = xss(req.body);
     req.query = xss(req.query);
     req.params = xss(req.params);
+    //get the user id
     const userId = req.user.id;
     const {
       name,
@@ -205,12 +222,14 @@ const updateProfile = [updateProfileValidation,async (req, res) => {
       location
     } = req.body;
 
-    // Get the user
+    // Get the user in the database
     const user = await User.findById(userId);
+    // Check if the user exist
     if (!user) {
       return res.status(404).json({ message: USER_ERRORS.USER_NOT_FOUND });
     }
 
+    // Check if the user is an industry
     if (user.userType === 'Industry') {
       requiredFields.push('gstNumber', 'certifications');
     }
@@ -219,7 +238,7 @@ const updateProfile = [updateProfileValidation,async (req, res) => {
     if (missingFields.length > 0) {
       return res.status(400).json({ message: `Missing required fields: ${missingFields.join(', ')}` });
         }
-        // Handle profile picture upload if present
+    // Handle profile picture upload if present
     if (req.file) {
         user.profilePicture = req.file.path;
     }
@@ -248,6 +267,7 @@ const updateProfile = [updateProfileValidation,async (req, res) => {
       user.gstNumber = gstNumber;
       user.certifications = certifications;
     }
+    
     // Invalidate the cache
     const cacheKey = `user-profile:${userId}`;
     if (client.connected) {
@@ -269,4 +289,87 @@ const updateProfile = [updateProfileValidation,async (req, res) => {
       }
 }];
 
-module.exports = { getUsers, verifyUser, updateProfile, getUserProfile};
+/**
+ * Create user
+ * @async
+ * @param {object} req - Express request object
+ * @param {object} res - Express response object
+ * @returns {Promise<void>}
+ */
+const createUser = async (req, res) => {
+    // Verify if the user is authenticated and authorized
+    if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).json({ message: USER_ERRORS.UNAUTHORIZED }); // 403 Forbidden
+    }
+
+    try {
+        // Sanitize inputs
+        req.body = xss(req.body);
+        req.query = xss(req.query);
+        req.params = xss(req.params);
+        // create an instance of the blockchain service
+        const blockchainService = new BlockchainService();
+        const {userId, publicKey, role} = req.body;
+        // Create user in blockchain
+        const userBlockchain = await blockchainService.CreateUser({"userId":userId, "publicKey":publicKey, "role":role})
+
+        if(!userBlockchain.success){
+          return res.status(500).json({ message: 'Failed to create user in blockchain', error: userBlockchain.error });
+        }
+
+        // Create user in database
+        const userDb = new User(req.body);
+        await userDb.save();
+
+
+        res.status(201).json({ message: 'User created successfully', userDb, userBlockchain });
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).json({ message: USER_ERRORS.UPDATE_FAILED, error: error.message });
+    }
+};
+
+/**
+ * Update user
+ * @async
+ * @param {object} req - Express request object
+ * @param {object} res - Express response object
+ * @returns {Promise<void>}
+ */
+const updateUser = async (req, res) => {
+    // Verify if the user is authenticated and authorized
+    if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).json({ message: USER_ERRORS.UNAUTHORIZED }); // 403 Forbidden
+    }
+    try {
+        // Sanitize inputs
+        req.body = xss(req.body);
+        req.query = xss(req.query);
+        req.params = xss(req.params);
+        // Create an instance of the blockchain service
+        const blockchainService = new BlockchainService();
+        const {userId, publicKey, role} = req.body;
+        // Get the user in database
+        const userDb = await User.findById(userId);
+        if (!userDb) {
+            return res.status(404).json({ message: USER_ERRORS.USER_NOT_FOUND });
+        }
+        // Update user in blockchain
+        const userBlockchain = await blockchainService.UpdateUser({"userId":userId, "publicKey":publicKey, "role":role})
+        if(!userBlockchain.success){
+          return res.status(500).json({ message: 'Failed to update user in blockchain', error: userBlockchain.error });
+        }
+
+        // Update the user in database
+        
+        userDb.set(req.body);
+        await userDb.save();
+
+        res.status(200).json({ message: 'User updated successfully', userDb, userBlockchain });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ message: USER_ERRORS.UPDATE_FAILED, error: error.message });
+    }
+};
+//export the function
+module.exports = { getUsers, verifyUser, updateProfile, getUserProfile, createUser, updateUser};

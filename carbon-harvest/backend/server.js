@@ -28,6 +28,7 @@ const onboardingRoutes = require('./routes/onboardingRoutes');
 const siteRoutes = require('./routes/siteRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 const reportsRoutes = require('./routes/reportsRoutes');
+const blockchainRoutes = require('./routes/blockchainRoutes');
 
 const app = express();
 
@@ -63,10 +64,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/credits', creditRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/gamification', gamificationRoutes);
-app.use('/api/users', onboardingRoutes);
+app.use('/api/onboarding', onboardingRoutes);
 app.use('/api/site', siteRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/reports', reportsRoutes);
+app.use('/api/blockchain', blockchainRoutes);
 
 // Serve static files with proper MIME types
 app.use(express.static('public', {

@@ -39,7 +39,6 @@ const HeroSection = () => {
       display: 'inline-flex',
       alignItems: 'center',
       gap: '0.5rem',
-      padding: '0.5rem 1rem',
       borderRadius: '2rem',
       background: 'var(--primary-color)',
       color: 'white',
@@ -66,7 +65,6 @@ const HeroSection = () => {
     actions: {
       display: 'flex',
       gap: '1rem',
-      justifyContent: 'center',
       flexWrap: 'wrap',
     },
     button: {
@@ -100,7 +98,7 @@ const HeroSection = () => {
               <span>Carbon Harvest</span>
             </div>
             
-            <h1 style={styles.heading}>
+            <h1 className='text-primary' style={styles.heading}>
               Empowering Farmers Through
               <span style={styles.highlight}> Carbon Credits</span>
             </h1>
@@ -128,10 +126,8 @@ const HeroSection = () => {
             </div>
           </div>
 
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: 'clamp(2rem, 5vw, 4rem)',
+          <div className='d-flex justify-content-center gap-4' style={{
+
             marginTop: '4rem',
             flexWrap: 'wrap',
             width: '100%',
@@ -140,7 +136,7 @@ const HeroSection = () => {
               textAlign: 'center',
               minWidth: '180px',
               background: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
+              backdropFilter: 'blur(10px)', 
               padding: '1.5rem',
               borderRadius: '1rem',
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',

@@ -168,39 +168,4 @@
     transform: translateY(0);
   }
 }
-/* Responsive Design - Improved */
-
-@media (max-width: 768px) {
-  .hero__title {
-    font-size: var(--font-size-2xl);
-  }
-  
-  .hero__subtitle {
-    font-size: var(--font-size-lg);
-  }
-  
-  .features__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .cta__title {
-    font-size: var(--font-size-xl);
-  }
-
-  .cta__description {
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-normal);
-  }
-}
-
-@media (max-width: 480px) {
-  .hero__content {
-    padding: var(--spacing-lg) var(--spacing-sm);
-  }
-
-  .btn {
-    width: 100%;
-    margin-bottom: var(--spacing-sm);
-  }
-}
 

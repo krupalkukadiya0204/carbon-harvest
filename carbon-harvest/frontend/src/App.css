@@ -351,6 +351,13 @@ body {
     box-shadow: var(--glass-shadow);
 }
 
+.loading-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--bg-primary);
+}
+
 /* Floating Action Button */
 .floating-action-button {
     position: fixed;
@@ -403,28 +410,6 @@ body {
     transition: opacity 0.4s, transform 0.4s;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .theme-toggle,
-    .floating-action-button {
-        bottom: var(--spacing-md);
-        right: var(--spacing-md);
-        width: 45px;
-        height: 45px;
-    }
-
-    .loading-content h2 {
-        font-size: var(--font-size-xl);
-    }
-
-    .loading-content p {
-        font-size: var(--font-size-md);
-    }
-
-    .interactive-card:hover {
-        transform: none;
-    }
-}
 
 /* Utility Classes */
 .container {
@@ -468,33 +453,6 @@ body {
 
 .shadow-lg {
     box-shadow: var(--shadow-lg);
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .container {
-        padding: 0 var(--spacing-md);
-    }
-}
-
-@media (max-width: 768px) {
-    .main-content {
-        padding: calc(var(--header-height) + var(--spacing-md)) var(--spacing-md) var(--spacing-md);
-    }
-
-    .loading-logo img {
-        width: 100px;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        padding: 0 var(--spacing-sm);
-    }
-
-    .loading-content p {
-        font-size: 1rem;
-    }
 }
 
 /* Header */

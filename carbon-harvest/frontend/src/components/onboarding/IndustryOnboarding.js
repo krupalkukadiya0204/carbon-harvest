@@ -31,7 +31,7 @@ const IndustryOnboarding = () => {
 
         try {
             const token = localStorage.getItem('token');
-            await axios.post('/api/users/industry-onboarding', formData, {
+            await axios.post('/api/onboarding/industry-onboarding', formData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             navigate('/dashboard');

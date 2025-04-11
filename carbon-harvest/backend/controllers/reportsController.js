@@ -1,10 +1,19 @@
+/**
+ * @file Controller for managing reports
+ */
 const Report = require("../models/Report");
 const { query, param, validationResult } = require("express-validator");
+const BlockchainService = require("../blockchain/blockchainService");
 const xss = require('xss-clean');
 const ActivityLog = require("../models/ActivityLog");
 const mongoose = require('mongoose'); 
 const { getAsync, setAsync, client } = require('../server');
 const sanitize = xss();
+
+/**
+ * @description Retrieve reports based on query parameters, with validation and caching.
+ * @returns {Promise<void>}
+ */
 const getReports = [
     query("startDate").optional().isDate().withMessage("startDate must be a valid date"),
     query("endDate").optional().isDate().withMessage("endDate must be a valid date"),
@@ -19,21 +28,23 @@ const getReports = [
         .withMessage("type must be one of: Carbon Emission, Water Usage, Biodiversity"),
     query("status").optional().isIn(["Pending", "Approved", "Rejected"]).withMessage("status must be one of: Pending, Approved, Rejected"),
     async (req, res) => {
+        // Sanitize query parameters
         req.query = sanitize(req.query);
-        const errors = validationResult(req);
-
-
-
-        
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-
-        
         try {
+            // Validate query parameters
+            const errors = validationResult(req);
+
+            // Check if there are validation errors
+            
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errors: errors.array() });
+            }
+    
+    
             const cachedReports = await getAsync('reports');
             if (cachedReports) {
                 return res.json(JSON.parse(cachedReports));
+                // Cache hit
             }
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
@@ -99,14 +110,20 @@ const getReports = [
             totalReports
         });
 
+        // Cache the reports
         await setAsync('reports', JSON.stringify({reports, currentPage: page, totalPages, totalReports}));
 
     } catch (error) {
         console.error("Error fetching reports:", error.message);
+        // Log the error
         res.status(500).json({ message: "Server error" });
+        // Send a server error response
     }
 }
 ];
+/**
+ * @description Download a specific report by reportId, with validation and user authorization checks.
+ */
 
 const downloadReport = [
     param("reportId").isMongoId().withMessage("reportId must be a valid MongoDB ID"),
@@ -166,6 +183,9 @@ const downloadReport = [
     }
 }];
 
+/**
+ * @description Add a new report, with database and blockchain updates.
+ */
 const addReport = [async (req, res, next) => {
         try{
                 await client.del('reports');
@@ -176,19 +196,49 @@ const addReport = [async (req, res, next) => {
         }
 }, async(req, res) => {
     try {
-        await ActivityLog.create({
+        const { type, data, farmerId, industryId } = req.body;
+        req.body = sanitize(req.body);
+        const reportData = {
+            // Report data
+            type,
+            data,
+            farmerId,
+            industryId
+        };
+
+        // Create report in the blockchain
+        // Create a new instance of the BlockchainService
+        const blockchainService = new BlockchainService();
+        // Create report in the blockchain
+        const blockchainReport = await blockchainService.createReport(reportData);
+
+        // Add report to database
+        const newReport = new Report({
+            // Assign blockchain report ID
+           ...reportData, blockchainReportId: blockchainReport.reportId
+        });
+        // Save report to database
+        await newReport.save();
+        // Add activity log
+         await ActivityLog.create({
+            // Log report creation activity
             userId: req.user._id,
+            // User ID from request
+
             action: "report added",
             details: `Report added by user ${req.user._id}`,
         });
-        res.status(201).json({ message: "report added" });
+        res.status(201).json({ message: "report added", report : newReport});
     } catch (error) {
         console.error("Error creating activity log:", error.message);
         res.status(500).json({ message: "Server error" });
     }
 }];
 
-const updateReport = [async (req, res, next) => {
+/**
+ * @description Update an existing report, with database and blockchain updates.
+ */
+const updateReport = [param("reportId").isMongoId().withMessage("reportId must be a valid MongoDB ID"),async (req, res, next) => {
     try {
         await client.del('reports');
         next()
@@ -197,8 +247,43 @@ const updateReport = [async (req, res, next) => {
         res.status(500).json({ message: "Server error" });
     }
 }, async (req, res) => {
+    try {
+        const reportId = req.params.reportId;
+
+        const { type, data, status } = req.body;
+        req.body = sanitize(req.body);
+        const updatedData = { type, data, status };
+
+
+        // Update report in the blockchain
+        // Create a new instance of the BlockchainService
+        const blockchainService = new BlockchainService();
+        // Update report in the blockchain
+        const blockchainReport = await blockchainService.updateReport({reportId:reportId,updatedData: updatedData});
+        
+        // Update report in database
+        const report = await Report.findByIdAndUpdate(reportId, updatedData, { new: true });
+
+        if (!report) {
+            return res.status(404).json({ message: "Report not found" });
+            // Report not found
+        }
+        await ActivityLog.create({
+            // Log report update activity
+            userId: req.user._id,
+            action: "report updated",
+            details: `report updated by user ${req.user._id}`,
+        });
+        res.status(200).json({ message: "Report updated", report });
+        // Successful update
+    } catch (error) {
+        console.error("Error updating report:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+}, async (req, res) => {
     await ActivityLog.create({
         userId: req.user._id,
+        // Log report update activity
         action: "report updated",
         details: `report updated by user ${req.user._id}`,
     });

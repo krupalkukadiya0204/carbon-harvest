@@ -27,19 +27,19 @@ const Hero = () => {
           <span className="highlight">Combat</span> Climate Change.
         </h1>
         <p className="hero-subtitle">
-          Join the sustainable farming revolution with cutting-edge carbon credit technology.
-          Together, we can build a greener future.
+          Join the sustainable farming revolution with cutting-edge carbon credit
+          technology. Together, we can build a greener future.
         </p>
         <div className="hero-cta">
-          <Link to="/marketplace" className="btn btn-primary">
+          <Link to="/marketplace" className="btn btn-primary mx-2">
             Explore Marketplace
           </Link>
-          <Link to="/about-us" className="btn btn-secondary">
+          <Link to="/about-us" className="btn btn-secondary mx-2">
             Learn More
           </Link>
         </div>
-        <div className="hero-stats">
-          <div className="stat-item">
+        <div className="hero-stats d-flex">
+          <div className="stat-item mx-3">
             <span className="stat-number">1M+</span>
             <span className="stat-label">Hectares Protected</span>
           </div>

@@ -122,23 +122,3 @@
 .grid-cols-3 {
     grid-template-columns: repeat(3, 1fr);
 }
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .page-layout {
-        padding: 1rem;
-    }
-
-    .page-container {
-        padding: 1.5rem;
-    }
-
-    .grid-cols-2,
-    .grid-cols-3 {
-        grid-template-columns: 1fr;
-    }
-
-    .page-title {
-        font-size: 1.5rem;
-    }
-}
