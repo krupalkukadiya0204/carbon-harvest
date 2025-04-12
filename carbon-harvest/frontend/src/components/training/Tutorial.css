@@ -1,0 +1,22 @@
+.tutorial-container {
+    padding: var(--section-padding) var(--content-padding);
+    background-color: var(--background-light);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-large);
+  }
+
+  .tutorial-sections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-medium);
+  }
+
+  .tutorial-section {
+    padding: var(--content-padding);
+  }
+  @media (min-width: 768px) {
+    .tutorial-sections {
+        flex-direction: row;
+    }
+  }

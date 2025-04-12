@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const xss = require('xss-clean');
+const { body, validationResult } = require('express-validator');
 
 // Controller functions
 const getSettings = async (req, res) => {
@@ -10,25 +12,28 @@ const getSettings = async (req, res) => {
         res.json({ settings: user.settings });
     } catch (error) {
         console.error("Error fetching settings:", error);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 };
 
-const updateSettings = async (req, res) => {
+const updateSettings = async (req, res) =>  {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    
+
     try {
+        // Sanitize inputs
+        req.body = xss().sanitize(req.body);
+
+
         const { emailNotifications, smsNotifications, language, theme, twoFactorAuth } = req.body;
 
-        // Validate language
-        if (language && !["en", "hi", "mr"].includes(language)) {
-            return res.status(400).json({ message: "Invalid language selection" });
-        }
-
-        // Validate theme
-        if (theme && !["light", "dark"].includes(theme)) {
-            return res.status(400).json({ message: "Invalid theme selection" });
-        }
-
         const user = await User.findById(req.user.id);
+        
+       
+        
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -47,11 +52,24 @@ const updateSettings = async (req, res) => {
         res.json({ settings: user.settings });
     } catch (error) {
         console.error("Error updating settings:", error);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 };
 
+
+const validateSettings = [
+    body('emailNotifications').optional().isBoolean().withMessage('emailNotifications must be a boolean'),
+    body('smsNotifications').optional().isBoolean().withMessage('smsNotifications must be a boolean'),
+    body('language').optional().isIn(['en', 'hi', 'mr']).withMessage('Invalid language selection'),
+    body('theme').optional().isIn(['light', 'dark']).withMessage('Invalid theme selection'),
+    body('twoFactorAuth').optional().isBoolean().withMessage('twoFactorAuth must be a boolean'),
+];
+
+
+
 module.exports = {
     getSettings,
-    updateSettings
+    updateSettings,
+    validateSettings
 };
+

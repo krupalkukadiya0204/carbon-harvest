@@ -1,10 +1,21 @@
-const express = require('express');
+const redis = require('redis');
+const { promisify } = require('util');
+const client = redis.createClient();
+client.on('connect', () => {
+    console.log('Connected to Redis');
+});
+client.on('error', (err) => {
+    console.error('Redis error:', err);
+});
+client.connect().catch(console.error);
+const getAsync = promisify(client.get).bind(client);
+const setAsync = promisify(client.set).bind(client);
+
+const helmet = require('helmet');
 const path = require('path');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 require('dotenv').config();
@@ -17,6 +28,7 @@ const onboardingRoutes = require('./routes/onboardingRoutes');
 const siteRoutes = require('./routes/siteRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 const reportsRoutes = require('./routes/reportsRoutes');
+const blockchainRoutes = require('./routes/blockchainRoutes');
 
 const app = express();
 
@@ -27,7 +39,6 @@ app.set('trust proxy', 1);
 app.use(morgan('combined'));
 
 // Security Middleware
-app.use(helmet());
 app.use(mongoSanitize());
 app.use(xss());
 
@@ -53,10 +64,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/credits', creditRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/gamification', gamificationRoutes);
-app.use('/api/users', onboardingRoutes);
+app.use('/api/onboarding', onboardingRoutes);
 app.use('/api/site', siteRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/reports', reportsRoutes);
+app.use('/api/blockchain', blockchainRoutes);
 
 // Serve static files with proper MIME types
 app.use(express.static('public', {

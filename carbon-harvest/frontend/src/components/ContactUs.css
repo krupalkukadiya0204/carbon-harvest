@@ -106,33 +106,3 @@ textarea.form-control {
     background-color: var(--color-text-tertiary);
     transform: none;
 }
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .contact-header .display-4 {
-        font-size: 2rem;
-    }
-
-    .contact-info-card,
-    .contact-form {
-        padding: var(--spacing-lg);
-    }
-
-    .social-links {
-        padding-top: var(--spacing-md);
-    }
-}
-
-@media (max-width: 576px) {
-    .section-heading {
-        font-size: 1.5rem;
-    }
-
-    .contact-item {
-        margin-bottom: var(--spacing-md);
-    }
-
-    .btn-primary {
-        padding: 0.625rem 1.25rem;
-    }
-}

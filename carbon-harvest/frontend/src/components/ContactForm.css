@@ -162,38 +162,3 @@
   background: #43A047;
   transform: translateY(-2px);
 }
-
-@media (max-width: 992px) {
-  .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  .contact-info {
-    order: 1;
-  }
-
-  .contact-form {
-    order: 0;
-  }
-}
-
-@media (max-width: 768px) {
-  .contact-section {
-    padding: 4rem 0;
-  }
-
-  .section-header h2 {
-    font-size: 2rem;
-  }
-
-  .info-card {
-    padding: 1rem;
-  }
-
-  .info-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-  }
-}

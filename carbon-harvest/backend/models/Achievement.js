@@ -38,9 +38,7 @@ const achievementSchema = new mongoose.Schema({
   referralCount: {
     type: Number,
     default: 0
-  }
-}, {
-  timestamps: true
+  }},{ timestamps: true
 });
 
 // Index for leaderboard queries

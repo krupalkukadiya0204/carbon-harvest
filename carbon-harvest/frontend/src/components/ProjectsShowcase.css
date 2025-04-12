@@ -157,32 +157,3 @@
   background: #43A047;
   transform: translateY(-2px);
 }
-
-@media (max-width: 992px) {
-  .projects-grid {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .projects-showcase {
-    padding: 4rem 0;
-  }
-
-  .section-header h2 {
-    font-size: 2rem;
-  }
-
-  .project-image {
-    height: 200px;
-  }
-
-  .project-impact {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .impact-item {
-    justify-content: center;
-  }
-}

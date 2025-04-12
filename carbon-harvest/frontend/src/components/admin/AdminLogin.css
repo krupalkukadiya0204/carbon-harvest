@@ -1,0 +1,20 @@
+.admin-login-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    gap: var(--gap-medium);
+    padding: var(--content-padding);
+    background-color: var(--background-light);
+  }
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-medium);
+  }
+
+  .form-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-small);
+  }

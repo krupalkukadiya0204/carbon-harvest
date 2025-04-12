@@ -14,7 +14,6 @@ const HeroSection = () => {
 
   const handleLearnMore = () => {
     setShowVideo(true);
-    // Smooth scroll to video section
     document.getElementById('video-section').scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -22,6 +21,7 @@ const HeroSection = () => {
     heroSection: {
       minHeight: '90vh',
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       padding: 'clamp(2rem, 5vw, 4rem) 0',
@@ -31,6 +31,7 @@ const HeroSection = () => {
     },
     heroContent: {
       maxWidth: '1200px',
+      width: '100%',
       margin: '0 auto',
       padding: '0 clamp(1rem, 5vw, 2rem)',
       textAlign: 'center',
@@ -39,7 +40,6 @@ const HeroSection = () => {
       display: 'inline-flex',
       alignItems: 'center',
       gap: '0.5rem',
-      padding: '0.5rem 1rem',
       borderRadius: '2rem',
       background: 'var(--primary-color)',
       color: 'white',
@@ -65,9 +65,10 @@ const HeroSection = () => {
     },
     actions: {
       display: 'flex',
-      gap: '1rem',
       justifyContent: 'center',
+      gap: '1rem',
       flexWrap: 'wrap',
+      marginBottom: '4rem',
     },
     button: {
       display: 'inline-flex',
@@ -88,6 +89,35 @@ const HeroSection = () => {
       border: '2px solid var(--primary-color)',
       color: 'var(--primary-color)',
     },
+    statsContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      gap: '2rem',
+      flexWrap: 'wrap',
+      width: '100%',
+      maxWidth: '1200px',
+      margin: '0 auto'
+    },
+    statBox: {
+      textAlign: 'center',
+      minWidth: '180px',
+      background: 'rgba(255, 255, 255, 0.1)',
+      backdropFilter: 'blur(10px)',
+      padding: '1.5rem',
+      borderRadius: '1rem',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    },
+    statValue: {
+      display: 'block',
+      fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+      color: 'var(--primary-color)',
+      marginBottom: '0.5rem',
+      fontWeight: '700',
+    },
+    statLabel: {
+      color: 'var(--text-secondary)',
+      fontSize: '1rem',
+    },
   };
 
   return (
@@ -99,27 +129,25 @@ const HeroSection = () => {
               <FaSeedling />
               <span>Carbon Harvest</span>
             </div>
-            
             <h1 style={styles.heading}>
               Empowering Farmers Through
               <span style={styles.highlight}> Carbon Credits</span>
             </h1>
-            
             <p style={styles.description}>
               Join Indias first platform connecting farmers with the global carbon market.
               Turn sustainable farming into profitable opportunities.
             </p>
 
             <div style={styles.actions}>
-              <button 
-                onClick={handleGetStarted} 
+              <button
+                onClick={handleGetStarted}
                 style={{ ...styles.button, ...styles.primaryButton }}
               >
                 Get Started
                 <FaArrowRight />
               </button>
-              <button 
-                onClick={handleLearnMore} 
+              <button
+                onClick={handleLearnMore}
                 style={{ ...styles.button, ...styles.secondaryButton }}
               >
                 <FaPlay style={{ fontSize: '0.875rem' }} />
@@ -128,84 +156,27 @@ const HeroSection = () => {
             </div>
           </div>
 
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: 'clamp(2rem, 5vw, 4rem)',
-            marginTop: '4rem',
-            flexWrap: 'wrap',
-            width: '100%',
-          }}>
-            <div style={{
-              textAlign: 'center',
-              minWidth: '180px',
-              background: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              padding: '1.5rem',
-              borderRadius: '1rem',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            }}>
-              <strong style={{
-                display: 'block',
-                fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-                color: 'var(--primary-color)',
-                marginBottom: '0.5rem',
-                fontWeight: '700',
-              }}>50,000+</strong>
-              <span style={{
-                color: 'var(--text-secondary)',
-                fontSize: '1rem',
-              }}>Farmers</span>
+          <div style={styles.statsContainer}>
+            <div style={styles.statBox}>
+              <strong style={styles.statValue}>50,000+</strong>
+              <span style={styles.statLabel}>Farmers</span>
             </div>
-            <div style={{
-              textAlign: 'center',
-              minWidth: '180px',
-              background: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              padding: '1.5rem',
-              borderRadius: '1rem',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            }}>
-              <strong style={{
-                display: 'block',
-                fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-                color: 'var(--primary-color)',
-                marginBottom: '0.5rem',
-                fontWeight: '700',
-              }}>₹100Cr+</strong>
-              <span style={{
-                color: 'var(--text-secondary)',
-                fontSize: '1rem',
-              }}>Credits Traded</span>
+            <div style={styles.statBox}>
+              <strong style={styles.statValue}>₹100Cr+</strong>
+              <span style={styles.statLabel}>Credits Traded</span>
             </div>
-            <div style={{
-              textAlign: 'center',
-              minWidth: '180px',
-              background: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              padding: '1.5rem',
-              borderRadius: '1rem',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            }}>
-              <strong style={{
-                display: 'block',
-                fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-                color: 'var(--primary-color)',
-                marginBottom: '0.5rem',
-                fontWeight: '700',
-              }}>1.2M</strong>
-              <span style={{
-                color: 'var(--text-secondary)',
-                fontSize: '1rem',
-              }}>CO₂ Reduced</span>
+            <div style={styles.statBox}>
+              <strong style={styles.statValue}>1.2M</strong>
+              <span style={styles.statLabel}>CO₂ Reduced</span>
             </div>
           </div>
         </div>
       </FullWidthSection>
       <div>
         {showVideo && <VideoSection />}
-      </div>  
+      </div>
     </>
   );
 };
+
 export default HeroSection;

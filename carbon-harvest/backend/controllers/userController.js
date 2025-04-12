@@ -1,8 +1,16 @@
 /**
  * @file User Controller - Handles user management operations
+ * @requires module:../server
  */
+const { getAsync, setAsync, client } = require('../server');
+const ActivityLog = require('../models/ActivityLog');
 
 const User = require('../models/User');
+const BlockchainService = require('../blockchain/blockchainService');
+const xss = require('xss-clean');
+const { body, validationResult } = require('express-validator');
+
+const {authenticate} = require('../middleware/authMiddleware');
 
 /**
  * Error messages for user operations
@@ -17,6 +25,7 @@ const USER_ERRORS = {
     VERIFY_FAILED: 'Failed to verify user. Please try again later.',
     UPDATE_FAILED: 'Failed to update profile. Please try again later.',
     UNAUTHORIZED: 'You are not authorized to perform this action.'
+    
 };
 
 /**
@@ -27,20 +36,29 @@ const USER_ERRORS = {
  * @returns {Promise<void>}
  */
 const getUsers = async (req, res) => {
-    try {
+    // Verify if the user is authenticated and authorized
+    if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).json({ message: USER_ERRORS.UNAUTHORIZED }); // 403 Forbidden
+    }
+    // Sanitize inputs
+    req.body = xss(req.body);
+    req.query = xss(req.query);
+    req.params = xss(req.params);
+
         const users = await User.find();
         res.status(200).json(users);
     } catch (error) {
-        console.error('Error fetching users:', error.message);
         if (error.name === 'MongoNetworkError') {
             res.status(500).json({ message: USER_ERRORS.DB_CONNECTION });
         } else if (error.name === 'CastError') {
             res.status(400).json({ message: USER_ERRORS.INVALID_REQUEST });
         } else {
-            res.status(500).json({ message: USER_ERRORS.FETCH_FAILED });
+            res.status(500).json({ message: USER_ERRORS.FETCH_FAILED, error: error.message});
+
+            console.error('Error fetching users:', error);
         }
     }
-}; 
+};
 
 /**
  *
@@ -57,7 +75,16 @@ const getUsers = async (req, res) => {
  * @returns {Promise<void>}
  */
 const verifyUser = async (req, res) => {
+    // Verify if the user is authenticated and authorized
+    if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).json({ message: USER_ERRORS.UNAUTHORIZED }); // 403 Forbidden
+    }
     const userId = req.params.id;
+    // Sanitize inputs
+    req.body = xss(req.body);
+    req.query = xss(req.query);
+    req.params = xss(req.params);
+
 
     try {
         const user = await User.findById(userId);
@@ -70,7 +97,6 @@ const verifyUser = async (req, res) => {
 
         res.status(200).json({ message: 'User verified successfully', user });
     } catch (error) {
-        console.error('Error verifying user:', error.message);
         if (error.name === 'MongoNetworkError') {
             res.status(500).json({ message: USER_ERRORS.DB_CONNECTION });
         } else if (error.name === 'CastError') {
@@ -78,7 +104,9 @@ const verifyUser = async (req, res) => {
         } else if (error.name === 'ValidationError') {
             res.status(400).json({ message: USER_ERRORS.INVALID_USER_DATA });
         } else {
-            res.status(500).json({ message: USER_ERRORS.VERIFY_FAILED });
+            res.status(500).json({ message: USER_ERRORS.VERIFY_FAILED, error: error.message });
+
+            console.error('Error verifying user:', error);
         }
     }
 };
@@ -91,29 +119,46 @@ const verifyUser = async (req, res) => {
  * @returns {Promise<void>}
  */
 const getUserProfile = async (req, res) => {
+    // Verify if the user is authenticated and authorized
+    if (!req.user) {
+        return res.status(403).json({ message: USER_ERRORS.UNAUTHORIZED }); // 403 Forbidden
+    }
+    // Sanitize inputs
+    req.body = xss(req.body);
+    req.query = xss(req.query);
+    req.params = xss(req.params);
+
     try {
-        console.log('Getting user profile for user ID:', req.user?.id);
-        if (!req.user || !req.user.id) {
-            console.error('No user ID found in request');
+        const userId = req.user.id;
+        if (!userId) {
+            console.error('No user ID found in request.');
             return res.status(401).json({ message: USER_ERRORS.UNAUTHORIZED });
         }
 
-        const user = await User.findById(req.user.id).select('-password');
-        console.log('Found user:', user ? 'Yes' : 'No');
+        const cacheKey = `user-profile:${userId}`;
+        const cachedProfile = await getAsync(cacheKey);
+
+        if (cachedProfile) {
+            console.log('Serving user profile from cache.');
+            return res.status(200).json({ user: JSON.parse(cachedProfile) });
+        }
+
+        console.log('Fetching user profile from database.');
+        const user = await User.findById(userId).select('-password');
 
         if (!user) {
-            console.error('User not found in database for ID:', req.user.id);
+            console.error('User not found in database for ID:', userId);
             return res.status(404).json({ message: USER_ERRORS.USER_NOT_FOUND });
         }
 
+        await setAsync(cacheKey, JSON.stringify(user));
+        console.log('User profile cached successfully.');
+
         res.status(200).json({ user });
     } catch (error) {
-        console.error('Error fetching user profile:', {
-            message: error.message,
-            stack: error.stack,
-            userId: req.user?.id
-        });
-        res.status(500).json({ message: USER_ERRORS.FETCH_FAILED });
+        console.error('Error fetching user profile:', error);
+        res.status(500).json({ message: USER_ERRORS.FETCH_FAILED, error: error.message });
+
     }
 };
 
@@ -124,152 +169,207 @@ const getUserProfile = async (req, res) => {
  * @param {object} res - Express response object
  * @returns {Promise<void>}
  */
-const updateProfile = async (req, res) => {
-    try {
-        const userId = req.user.id;
-        const {
-            name,
-            organization,
-            phone,
-            address,
-            city,
-            state,
-            country,
-            pincode,
-            bankName,
-            accountNumber,
-            ifscCode,
-            panNumber,
-            gstNumber,
-            farmSize,
-            farmType,
-            cropTypes,
-            certifications
-        } = req.body;
-
-        // Get the user
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: USER_ERRORS.USER_NOT_FOUND });
+const updateProfileValidation = [
+    body('name').notEmpty().withMessage('Name is required'),
+    body('email').optional().isEmail().withMessage('Invalid email format'),
+    body('phone').notEmpty().withMessage('Phone is required').isMobilePhone().withMessage('Invalid phone number'),
+    body('bankName').notEmpty().withMessage('Bank Name is required'),
+    body('accountNumber').notEmpty().withMessage('Account Number is required'),
+    body('ifscCode').notEmpty().withMessage('IFSC Code is required'),
+    body('panNumber').notEmpty().withMessage('PAN Number is required'),
+    body('gstNumber').optional().notEmpty().withMessage('GST Number is required'),
+    body('farmSize').optional().isNumeric().withMessage('Farm Size must be a number'),
+    body('farmType').optional().notEmpty().withMessage('Farm Type is required'),
+    body('cropTypes').optional().notEmpty().withMessage('Crop Types is required'),
+    body('certifications').optional().notEmpty().withMessage('Certifications is required'),
+    body('location').optional().isObject().withMessage('Location must be an object'),
+    body('location.address').optional().notEmpty().withMessage('Location address is required'),
+    body('location.city').optional().notEmpty().withMessage('Location city is required'),
+    body('location.state').optional().notEmpty().withMessage('Location state is required'),
+    body('location.country').optional().notEmpty().withMessage('Location country is required'),
+    body('location.pincode').optional().notEmpty().withMessage('Location pincode is required'),
+    (req, res, next) => {
+        const errors = validationResult(req);
+        //check if the is error
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ message: 'Validation failed', errors: errors.array() });
         }
+        next();
+    },
+];
+// Update the user profile
+const updateProfile = [updateProfileValidation, async (req, res) => {
+  try {
+      // Sanitize inputs
+    req.body = xss(req.body);
+    req.query = xss(req.query);
+    req.params = xss(req.params);
+    //get the user id
+    const userId = req.user.id;
+    const {
+      name,
+      organization,
+      phone,
+      bankName,
+      accountNumber,
+      ifscCode,
+      panNumber,
+      gstNumber,
+      farmSize,
+      farmType,
+      cropTypes,
+      certifications,
+      location
+    } = req.body;
 
-        // Validate required fields based on user type
-        const requiredFields = [
-            'name', 'phone', 'address', 'city', 'state',
-            'country', 'pincode', 'bankName', 'accountNumber',
-            'ifscCode', 'panNumber'
-        ];
-
-        if (user.userType === 'Farmer') {
-            requiredFields.push('farmSize', 'farmType', 'cropTypes');
-        }
-
-        if (user.userType === 'Industry') {
-            requiredFields.push('gstNumber', 'certifications');
-        }
-
-        const missingFields = requiredFields.filter(field => !req.body[field]);
-        if (missingFields.length > 0) {
-            return res.status(400).json({
-                message: `Missing required fields: ${missingFields.join(', ')}`
-            });
-        }
-
-        // Handle profile picture upload if present
-        let profilePicture = user.profilePicture;
-        if (req.file) {
-            profilePicture = req.file.path;
-        }
-
-        // Update user profile
-        user.name = name;
-        user.organization = organization;
-        user.phone = phone;
-        user.address = address;
-        user.city = city;
-        user.state = state;
-        user.country = country;
-        user.pincode = pincode;
-        user.bankName = bankName;
-        user.accountNumber = accountNumber;
-        user.ifscCode = ifscCode;
-        user.panNumber = panNumber;
-        user.profilePicture = profilePicture;
-
-        // Update user type specific fields
-        if (user.userType === 'Farmer') {
-            user.farmSize = farmSize;
-            user.farmType = farmType;
-            user.cropTypes = cropTypes;
-        }
-
-        if (user.userType === 'Industry') {
-            user.gstNumber = gstNumber;
-            user.certifications = certifications;
-        }
-
-        // Save the updated user
-        await user.save();
-
-        // Return success response
-        res.status(200).json({
-            message: 'Profile updated successfully',
-            user: {
-                name: user.name,
-                organization: user.organization,
-                phone: user.phone,
-                address: user.address,
-                city: user.city,
-                state: user.state,
-                country: user.country,
-                pincode: user.pincode,
-                profilePicture: user.profilePicture,
-                userType: user.userType,
-                // Include type-specific fields
-                ...(user.userType === 'Farmer' && {
-                    farmSize: user.farmSize,
-                    farmType: user.farmType,
-                    cropTypes: user.cropTypes
-                }),
-                ...(user.userType === 'Industry' && {
-                    gstNumber: user.gstNumber,
-                    certifications: user.certifications
-                })
-            }
-        });
-    } catch (error) {
-        console.error('Error updating profile:', error);
-        res.status(500).json({ message: USER_ERRORS.UPDATE_FAILED });
+    // Get the user in the database
+    const user = await User.findById(userId);
+    // Check if the user exist
+    if (!user) {
+      return res.status(404).json({ message: USER_ERRORS.USER_NOT_FOUND });
     }
+
+    // Check if the user is an industry
+    if (user.userType === 'Industry') {
+      requiredFields.push('gstNumber', 'certifications');
+    }
+
+    const missingFields = requiredFields.filter(field => !req.body[field]);
+    if (missingFields.length > 0) {
+      return res.status(400).json({ message: `Missing required fields: ${missingFields.join(', ')}` });
+        }
+    // Handle profile picture upload if present
+    if (req.file) {
+        user.profilePicture = req.file.path;
+    }
+
+    // Update user profile
+    user.name = name;
+    user.organization = organization;
+    user.phone = phone;
+    user.bankName = bankName;
+    user.accountNumber = accountNumber;
+    user.ifscCode = ifscCode;
+    user.panNumber = panNumber;
+
+    // Update location if provided
+    if (location) {
+        user.location = { ...user.location, ...location };
+    }
+    // Update user type specific fields
+    if (user.userType === 'Farmer') {
+      user.farmSize = farmSize;
+      user.farmType = farmType;
+      user.cropTypes = cropTypes;
+    }
+
+    if (user.userType === 'Industry') {
+      user.gstNumber = gstNumber;
+      user.certifications = certifications;
+    }
+    
+    // Invalidate the cache
+    const cacheKey = `user-profile:${userId}`;
+    if (client.connected) {
+        await client.del(cacheKey);
+    }
+    await user.save();
+        // Add activity log
+    const activityLog = new ActivityLog({
+        userId: user._id,
+        action: 'user updated profile',
+    });
+
+    await activityLog.save();
+
+    res.status(200).json({ message: 'Profile updated successfully', user });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ message: USER_ERRORS.UPDATE_FAILED, error: error.message });
+      }
+}];
+
+/**
+ * Create user
+ * @async
+ * @param {object} req - Express request object
+ * @param {object} res - Express response object
+ * @returns {Promise<void>}
+ */
+const createUser = async (req, res) => {
+    // Verify if the user is authenticated and authorized
+    if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).json({ message: USER_ERRORS.UNAUTHORIZED }); // 403 Forbidden
+    }
+
     try {
-        const user = await User.findById(req.user.id);
-        if (!user) {
-            return res.status(404).json({ message: USER_ERRORS.USER_NOT_FOUND });
+        // Sanitize inputs
+        req.body = xss(req.body);
+        req.query = xss(req.query);
+        req.params = xss(req.params);
+        // create an instance of the blockchain service
+        const blockchainService = new BlockchainService();
+        const {userId, publicKey, role} = req.body;
+        // Create user in blockchain
+        const userBlockchain = await blockchainService.CreateUser({"userId":userId, "publicKey":publicKey, "role":role})
+
+        if(!userBlockchain.success){
+          return res.status(500).json({ message: 'Failed to create user in blockchain', error: userBlockchain.error });
         }
 
-        // Update fields if they exist in the request
-        const { name, organization, phone } = req.body;
-        if (name) user.name = name;
-        if (organization) user.organization = organization;
-        if (phone) user.phone = phone;
+        // Create user in database
+        const userDb = new User(req.body);
+        await userDb.save();
 
-        // Handle profile picture upload
-        if (req.file) {
-            user.profilePicture = `/api/uploads/profiles/${req.file.filename}`;
-        }
 
-        await user.save();
-
-        // Return updated user without password
-        const updatedUser = await User.findById(user._id).select('-password');
-        res.status(200).json({ 
-            message: 'Profile updated successfully',
-            user: updatedUser
-        });
+        res.status(201).json({ message: 'User created successfully', userDb, userBlockchain });
     } catch (error) {
-        console.error('Error updating profile:', error.message);
-        res.status(500).json({ message: USER_ERRORS.UPDATE_FAILED });
+        console.error('Error creating user:', error);
+        res.status(500).json({ message: USER_ERRORS.UPDATE_FAILED, error: error.message });
     }
 };
 
-module.exports = { getUsers, verifyUser, updateProfile, getUserProfile };
+/**
+ * Update user
+ * @async
+ * @param {object} req - Express request object
+ * @param {object} res - Express response object
+ * @returns {Promise<void>}
+ */
+const updateUser = async (req, res) => {
+    // Verify if the user is authenticated and authorized
+    if (!req.user || req.user.role !== 'admin') {
+        return res.status(403).json({ message: USER_ERRORS.UNAUTHORIZED }); // 403 Forbidden
+    }
+    try {
+        // Sanitize inputs
+        req.body = xss(req.body);
+        req.query = xss(req.query);
+        req.params = xss(req.params);
+        // Create an instance of the blockchain service
+        const blockchainService = new BlockchainService();
+        const {userId, publicKey, role} = req.body;
+        // Get the user in database
+        const userDb = await User.findById(userId);
+        if (!userDb) {
+            return res.status(404).json({ message: USER_ERRORS.USER_NOT_FOUND });
+        }
+        // Update user in blockchain
+        const userBlockchain = await blockchainService.UpdateUser({"userId":userId, "publicKey":publicKey, "role":role})
+        if(!userBlockchain.success){
+          return res.status(500).json({ message: 'Failed to update user in blockchain', error: userBlockchain.error });
+        }
+
+        // Update the user in database
+        
+        userDb.set(req.body);
+        await userDb.save();
+
+        res.status(200).json({ message: 'User updated successfully', userDb, userBlockchain });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ message: USER_ERRORS.UPDATE_FAILED, error: error.message });
+    }
+};
+//export the function
+module.exports = { getUsers, verifyUser, updateProfile, getUserProfile, createUser, updateUser};

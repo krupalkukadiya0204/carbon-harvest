@@ -1,13 +1,14 @@
 /**
  * @file Contact Us Component - Provides contact form and information
- * @description A responsive and accessible contact page with form validation
- * and interactive features
+ * @description A responsive and accessible contact page to get in touch with CarbonHarvest.
  */
 
 import React, { useState } from "react";
 import "./ContactUs.css";
 import ErrorDisplay from "../common/ErrorDisplay";
-
+import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaLinkedin, FaTwitter, FaFacebook } from 'react-icons/fa';
+import { motion } from "framer-motion";
+import PageLayout from "./layouts/PageLayout";
 /**
  * ContactUs Component - Displays contact form and company contact information
  * @returns {JSX.Element} Contact us page component
@@ -17,7 +18,7 @@ const ContactUs = () => {
     name: "",
     email: "",
     subject: "",
-    message: "",
+    message: ""
   });
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
@@ -53,7 +54,7 @@ const ContactUs = () => {
     if (validationErrors.length > 0) {
       setError(validationErrors.join(', '));
       setIsLoading(false);
-      return;
+      return; 
     }
 
     try {
@@ -76,7 +77,7 @@ const ContactUs = () => {
         setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
         throw new Error(data.message || 'Failed to send message. Please try again.');
-      }
+      } 
     } catch (error) {
       setError(error.message);
     } finally {

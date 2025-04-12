@@ -1,6 +1,6 @@
 const express = require('express');
-const { getUsers, verifyUser, updateProfile, getUserProfile } = require('../controllers/userController');
-const { protect: authMiddleware } = require('../middleware/authMiddleware');
+const { getUsers, verifyUser, updateProfile, getUserProfile, validateUpdateProfile } = require('../controllers/userController');
+const { protect: authMiddleware, authorize } = require('../middleware/authMiddleware');
 const multer = require('multer');
 const path = require('path');
 
@@ -28,13 +28,13 @@ const upload = multer({
 });
 
 // Get all users
-router.get('/', authMiddleware, getUsers);
+router.get('/', authMiddleware, authorize(['farmer', 'industry', 'regulator', 'admin']), getUsers);
 
 // Get user profile
-router.get('/profile', authMiddleware, getUserProfile);
+router.get('/profile', authMiddleware, authorize(['farmer', 'industry', 'regulator', 'admin']), getUserProfile);
 
 // Update user profile
-router.put('/profile', authMiddleware, upload.single('profilePicture'), updateProfile);
+router.put('/profile', authMiddleware, authorize(['farmer', 'industry', 'regulator', 'admin']), upload.single('profilePicture'), validateUpdateProfile, updateProfile);
 
 // Verify a user
 router.post('/verify/:id', authMiddleware, verifyUser);

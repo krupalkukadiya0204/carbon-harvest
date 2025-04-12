@@ -1,67 +1,25 @@
 .dashboard-card {
-  background: var(--white);
-  border: 1px solid var(--neutral-200);
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-  height: 100%;
+  background-color: var(--background-color);
+  padding: var(--content-padding);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--box-shadow);
   display: flex;
   flex-direction: column;
-  position: relative;
-  overflow: hidden;
 }
 
-.dashboard-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border-color: var(--neutral-300);
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-medium);
 }
 
-.dashboard-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: var(--gradient-primary);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+.card-header {
+  display: flex;
+  justify-content: space-between;
 }
 
-.dashboard-card:hover::before {
-  opacity: 1;
-}
-
-.dashboard-card-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 0.75rem;
-}
-
-.dashboard-card-description {
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  flex-grow: 1;
-}
-
-.dashboard-card-link {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.75rem 1.25rem;
-  background: var(--gradient-subtle);
-  color: var(--primary-color);
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  border: 1px solid var(--neutral-200);
-}
-
-.dashboard-card-link:hover {
-  background: var(--gradient-primary);
-  color: var(--white);
-  border-color: transparent;
+.card-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-medium);
 }

@@ -1,53 +1,33 @@
-.support-portal-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+.support-portal {
+    padding: var(--section-padding) var(--content-padding);
+    background-color: var(--background-light);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-large);
 }
 
-.support-portal-container h2 {
-  text-align: center;
-  color: #2c3e50;
-  margin-bottom: 2rem;
+.support-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-medium);
 }
 
-.faq-card {
-  margin-bottom: 1rem;
+.support-card {
+    padding: var(--content-padding);
 }
 
-.faq-card h3 {
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
+@media (min-width: 768px) {
+    .support-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
 }
 
-.faq-card p {
-  color: #34495e;
-  margin: 0;
-}
-
-.ticket-card {
-  margin-bottom: 1rem;
-}
-
-.ticket-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.ticket-id {
-  color: #7f8c8d;
-  font-family: monospace;
-}
-
-.new-ticket-btn {
-  margin-bottom: 1rem;
-}
-
+.support-portal-container h2,\n.faq-card h3,\n.faq-card p,\n.ticket-id,\n.documentation-section li {\n    color: var(--text-color);\n}
 .documentation-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: var(--gap-medium);
 }
 
 .documentation-section .ant-card {
@@ -60,15 +40,12 @@
 }
 
 .documentation-section li {
-  margin-bottom: 0.5rem;
-  color: #34495e;
   cursor: pointer;
 }
 
 .documentation-section li:hover {
   color: #3498db;
 }
-
 @media (max-width: 768px) {
   .documentation-section {
     grid-template-columns: 1fr;

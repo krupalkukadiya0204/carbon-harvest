@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/adminController');
-const { protect, validateAdmin } = require('../middleware/authMiddleware');
+const { protect, authorize } = require('../middleware/authMiddleware');
 
-// Protect all admin routes with authentication and admin validation
+// Protect all admin routes with authentication and admin authorization
 router.use(protect);
-router.use(validateAdmin);
+router.use(authorize(['admin']));
 
 // User management routes
+
 router.get('/users', adminController.getUsers);
 router.get('/users/:id', adminController.getUserDetails);
 router.put('/users/:id', adminController.updateUser);

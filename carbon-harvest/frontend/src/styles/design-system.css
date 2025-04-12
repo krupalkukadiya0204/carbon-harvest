@@ -1,22 +1,42 @@
 :root {
   /* Colors */
-  --primary-color: #2E7D32;
-  --primary-light: #4CAF50;
-  --primary-dark: #1B5E20;
-  --secondary-color: #FFA000;
-  --secondary-light: #FFB74D;
-  --secondary-dark: #F57C00;
-  
+  --primary-color: #2a9d8f; /* Teal */
+  --primary-light: #43aa8b; /* Lighter Teal */
+  --primary-dark: #287271; /* Darker Teal */
+  --secondary-color: #e9c46a; /* Yellow */
+  --secondary-light: #f4a261; /* Orange */
+  --secondary-dark: #e76f51; /* Dark Orange */
+
+    /* Accent colors for highlights */
+    --accent-blue: #264653; /* Dark Blue */
+    --accent-green: #8ecae6; /* Light Blue */
+
+    /* Error and warning colors */
+    --error-color: #d90429; /* Red */
+    --warning-color: #ffba08; /* Yellow */
+
+    /* Success color */
+    --success-color: #43aa8b;
+
   /* Neutral Colors */
-  --neutral-100: #FFFFFF;
-  --neutral-200: #F5F5F5;
-  --neutral-300: #E0E0E0;
-  --neutral-400: #BDBDBD;
-  --neutral-500: #9E9E9E;
-  --neutral-600: #757575;
-  --neutral-700: #616161;
-  --neutral-800: #424242;
-  --neutral-900: #212121;
+  --neutral-100: #ffffff; /* White */
+  --neutral-200: #f8f9fa; /* Very Light Gray */
+  --neutral-300: #e9ecef; /* Light Gray */
+  --neutral-400: #dee2e6; /* Medium Light Gray */
+  --neutral-500: #ced4da; /* Medium Gray */
+  --neutral-600: #adb5bd; /* Gray */
+  --neutral-700: #6c757d; /* Dark Gray */
+  --neutral-800: #495057; /* Very Dark Gray */
+  --neutral-900: #212529; /* Black */
+
+    /* Text Colors */
+    --text-primary: var(--neutral-900); /* Dark text */
+    --text-secondary: var(--neutral-700); /* Medium dark text */
+    --text-light: var(--neutral-100); /* White text */
+
+    /* Background Colors */
+    --background-default: var(--neutral-200); /* Light Gray */
+    --background-secondary: var(--neutral-100); /* White */
   
   /* Typography */
   --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -24,13 +44,14 @@
   
   /* Font Sizes */
   --text-xs: 0.75rem;   /* 12px */
-  --text-sm: 0.875rem;  /* 14px */
+  --text-sm: 0.875rem;   /* 14px */
   --text-base: 1rem;    /* 16px */
   --text-lg: 1.125rem;  /* 18px */
   --text-xl: 1.25rem;   /* 20px */
-  --text-2xl: 1.5rem;   /* 24px */
-  --text-3xl: 1.875rem; /* 30px */
-  --text-4xl: 2.25rem;  /* 36px */
+  --text-2xl: 1.75rem; /*28px */
+  --text-3xl: 2.25rem;  /* 36px */
+  --text-4xl: 3rem;    /* 48px */
+    --text-5xl: 3.75rem;    /* 60px */
   
   /* Font Weights */
   --font-light: 300;
@@ -39,13 +60,13 @@
   --font-semibold: 600;
   --font-bold: 700;
   
-  /* Spacing */
+ /* Spacing */
   --spacing-xs: 0.25rem;  /* 4px */
   --spacing-sm: 0.5rem;   /* 8px */
   --spacing-md: 1rem;     /* 16px */
   --spacing-lg: 1.5rem;   /* 24px */
   --spacing-xl: 2rem;     /* 32px */
-  --spacing-2xl: 3rem;    /* 48px */
+  --spacing-2xl: 2.5rem; /* 40px */
   --spacing-3xl: 4rem;    /* 64px */
   
   /* Border Radius */
@@ -57,11 +78,11 @@
   
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
   
   /* Layout */
-  --container-max-width: 1280px;
+  --container-max-width: 1200px;
   --header-height: 4rem;
   --footer-height: 3rem;
   
@@ -71,7 +92,7 @@
   --z-tooltip: 300;
   
   /* Transitions */
-  --transition-fast: 150ms;
+  --transition-fast: 100ms;
   --transition-normal: 250ms;
   --transition-slow: 350ms;
 }

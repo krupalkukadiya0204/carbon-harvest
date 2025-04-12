@@ -60,20 +60,6 @@
   cursor: pointer;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .data-visual-container {
-    padding: var(--spacing-lg);
-  }
-
-  .chart-title {
-    font-size: 1.2rem;
-  }
-
-  .chart-wrapper {
-    height: 250px;
-  }
-}
 
 /* Dark Mode Support */
 [data-theme='dark'] .data-visual-container {

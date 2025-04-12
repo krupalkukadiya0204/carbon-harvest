@@ -1,19 +1,21 @@
 /*====================================================
   HEADER VARIABLES & BASE STYLES
 ====================================================*/
-:root {
+
+.header-styles{
   /* Layout */
-  --header-height: 4rem;
-  --header-padding: clamp(0.75rem, 2vw, 1rem);
-  --header-logo-size: clamp(1.5rem, 3vw, 2rem);
-  
+  --header-height: 3.5rem;
+  --header-padding: 0.5rem;
+  --header-logo-size: 1.8rem;
+  --nav-link-padding: 0.5rem 1rem;
+
   /* Colors */
-  --header-bg: rgba(255, 255, 255, 0.98);
-  --header-border: var(--neutral-200);
-  
+  --header-bg: var(--neutral-0);
+  --header-text: var(--neutral-800);
+  --header-border: var(--neutral-100);
+
   /* Effects */
-  --header-blur: 8px;
-  --header-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --header-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   --header-transition: 0.3s ease;
 }
 
@@ -21,22 +23,24 @@
   MAIN HEADER
 ====================================================*/
 .main-header {
+  font-family: var(--font-family-sans);
   background-color: var(--header-bg);
-  padding: var(--header-padding) 0;
+  padding: var(--header-padding);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   width: 100%;
   z-index: 1000;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   transition: all var(--header-transition);
   border-bottom: 1px solid var(--header-border);
+  box-shadow: var(--header-shadow);
 }
 
 .main-header.scrolled {
-  padding: calc(var(--header-padding) * 0.75) 0;
+  padding: calc(var(--header-padding) * 0.8);
   background-color: var(--header-bg);
   box-shadow: var(--header-shadow);
 }
@@ -45,16 +49,16 @@
   DASHBOARD HEADER
 ====================================================*/
 .dashboard-header {
+  font-family: var(--font-family-sans);
   background-color: var(--header-bg);
   border-bottom: 1px solid var(--header-border);
-  padding: var(--header-padding) 0;
+  padding: var(--header-padding);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   width: 100%;
   z-index: 1000;
-  display: flex;
   justify-content: center;
 }
 
@@ -64,88 +68,63 @@
 .header-container,
 .dashboard-header-container {
   width: 100%;
-  max-width: var(--content-max-width);
-  height: 100%;
+  max-width: var(--max-width-container);
   margin: 0 auto;
-  padding: 0 var(--container-padding);
+  padding: 0 var(--space-4);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100%;
 }
 
 /*====================================================
   LOGO STYLES
 ====================================================*/
 .header-logo,
-.dashboard-logo a {
-  display: flex;
-  align-items: center;
+.dashboard-logo{
   text-decoration: none;
   color: var(--primary-color);
   font-size: var(--header-logo-size);
-  font-weight: bold;
+  font-weight: 600;
   transition: transform var(--header-transition);
+  display: flex;
+  align-items: center;
+}
+.dashboard-logo a{
+  color: var(--primary-color);
+  text-decoration: none;
 }
 
 .header-logo:hover,
-.dashboard-logo a:hover {
+.dashboard-logo:hover {
   transform: translateY(-2px);
 }
 
 /*====================================================
   NAVIGATION
 ====================================================*/
-.header-nav,
-.dashboard-nav {
+.header-nav{
   display: flex;
-  gap: var(--content-spacing);
+  gap: var(--space-4);
 }
-
 .nav-link {
-  color: var(--text-secondary);
+  color: var(--header-text);
   text-decoration: none;
   font-weight: 500;
   transition: all var(--header-transition);
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
+  padding: var(--nav-link-padding);
+  border-radius: var(--border-radius-md);
 }
 
 .nav-link:hover {
   color: var(--primary-color);
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--neutral-100);
 }
 
 .nav-link.active {
   color: var(--primary-color);
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--neutral-200);
 }
 
-/*====================================================
-  RESPONSIVE STYLES
-====================================================*/
-@media (max-width: 992px) {
-  .header-nav,
-  .dashboard-nav {
-    position: fixed;
-    top: var(--header-height);
-    right: 0;
-    flex-direction: column;
-    background-color: var(--header-bg-light);
-    padding: 1rem;
-    box-shadow: var(--header-shadow);
-    transform: translateX(100%);
-    transition: transform var(--header-transition);
-  }
 
-  .header-nav.active,
-  .dashboard-nav.active {
-    transform: translateX(0);
-  }
-}
 
-@media (max-width: 768px) {
-  :root {
-    --header-padding: 0.75rem;
-    --header-logo-size: 1.25rem;
-  }
-}

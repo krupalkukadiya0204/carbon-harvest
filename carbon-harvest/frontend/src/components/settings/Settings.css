@@ -1,23 +1,21 @@
 .settings-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2.5rem;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: var(--section-padding) var(--content-padding);
+    background-color: var(--background-light);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-large);
+}
+
+.settings-grid {
+    display: grid;
+    gap: var(--gap-medium);
 }
 
 .settings-container h1 {
     color: #2c5282;
-    margin-bottom: 2rem;
-    font-size: 1.8rem;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 1rem;
 }
 
 .settings-section {
-    margin-bottom: 2.5rem;
-    padding: 1.5rem;
     background-color: #f8f9fa;
     border-radius: 8px;
 }
@@ -79,6 +77,10 @@
     margin-top: 1rem;
 }
 
+.setting-card {
+    padding: var(--content-padding);
+}
+
 .save-button:hover {
     background-color: #45a049;
     transform: translateY(-2px);
@@ -109,13 +111,13 @@
 }
 
 /* Responsive Design */
+@media (min-width: 768px) {
+    .settings-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 @media (max-width: 768px) {
-    .settings-container {
-        margin: 1rem;
-        padding: 1.5rem;
-    }
-
-    .settings-section {
-        padding: 1rem;
-    }
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
 }

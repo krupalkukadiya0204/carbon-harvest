@@ -274,38 +274,6 @@
     margin-top: 0.25rem;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .industry-onboarding {
-        margin: 1rem;
-        padding: 1rem;
-    }
-
-    .progress-bar {
-        padding: 0;
-    }
-
-    .step-label {
-        font-size: 0.8rem;
-    }
-
-    .form-container {
-        padding: 1rem;
-    }
-
-    .checkbox-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .input-group {
-        flex-direction: column;
-    }
-
-    .input-group select {
-        width: 100%;
-    }
-}
-
 /* Animations */
 @keyframes fadeIn {
     from {

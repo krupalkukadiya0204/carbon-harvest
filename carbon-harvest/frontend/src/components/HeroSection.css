@@ -149,35 +149,3 @@ h1 {
   color: #64748b;
   font-weight: 500;
 }
-
-@media (max-width: 768px) {
-  .hero-section {
-    min-height: auto;
-    padding: 4rem 0;
-  }
-
-  .hero-content {
-    padding: 1.5rem;
-    gap: 2.5rem;
-  }
-
-  .hero-metrics {
-    flex-direction: column;
-    gap: 2rem;
-  }
-
-  .metric strong {
-    font-size: 2rem;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .btn-primary,
-  .btn-secondary {
-    width: 100%;
-    justify-content: center;
-  }
-}

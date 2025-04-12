@@ -1,59 +1,124 @@
-/* Global Layout Styles */
+/* Layout Base Variables */
 :root {
-  --content-padding-x: clamp(1rem, 5vw, 2rem);
+  --content-padding-x: 1rem; /* Base padding for content */
   --content-max-width: 1440px;
-  --section-margin: calc(-50vw + 50%);
+  --section-margin: -1rem; /* Default margin for sections */
+  --section-margin-mobile: -0.5rem; /* Default margin for sections in mobile */
+  --section-padding-y: 4rem; /* Default padding for sections */
+  --section-padding-y-mobile: 2rem; /* Default padding for sections in mobile */
+  --grid-gap: 1rem; /* Default gap for grids */
+  --grid-gap-mobile: 0.5rem; /* Default gap for grids in mobile */
+
 }
 
-/* Full-width container that breaks out of parent constraints */
+/* ============================================ */
+/* container */
+/* ============================================ */
+
 .full-width-container {
-  width: 100vw;
-  margin-left: var(--section-margin);
-  margin-right: var(--section-margin);
-  padding: 0;
+  width: 100%;
+  margin-left: calc(var(--section-margin) + 0px); /* Add 0px to ensure it's treated as a calculation */
+  margin-right: calc(var(--section-margin) + 0px);
+  padding: 0 var(--content-padding-x);
   position: relative;
-  left: 50%;
-  right: 50%;
-  transform: translateX(-50%);
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    margin-left: calc(var(--section-margin-mobile) + 0px);
+    margin-right: calc(var(--section-margin-mobile) + 0px);
+  }
 }
 
-/* Content container with consistent padding */
-.content-container {
+/* ============================================ */
+/* Content Container (centered)*/
+/* ============================================ */
+
+.container {
   width: 100%;
   max-width: var(--content-max-width);
   margin: 0 auto;
   padding: 0 var(--content-padding-x);
   box-sizing: border-box;
+  @media (max-width: 768px){
+    padding: 0 calc(var(--content-padding-x) * 0.75);
+  }
+  @media (max-width: 480px) {
+    padding: 0 calc(var(--content-padding-x) * 0.5);
+  }
 }
 
-/* Full-bleed section that maintains content width */
+/* ============================================ */
+/* Full-Bleed Section */
+/* section */
+/* ============================================ */
+
+/* ============================================ */
+
 .full-bleed-section {
-  width: 100vw;
-  margin-left: var(--section-margin);
-  margin-right: var(--section-margin);
-  padding: 3rem 0;
+  width: 100%;
+  margin-left: calc(var(--section-margin) + 0px); /* Add 0px to ensure it's treated as a calculation */
+  margin-right: calc(var(--section-margin) + 0px);
+  padding: var(--section-padding-y) 0;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  box-sizing: border-box;
+  @media (max-width: 768px) {
+    margin-left: calc(var(--section-margin-mobile) + 0px);
+    margin-right: calc(var(--section-margin-mobile) + 0px);
+    padding: var(--section-padding-y-mobile) 0;
+  }
 }
 
 .full-bleed-section > * {
   width: 100%;
   max-width: var(--content-max-width);
   padding: 0 var(--content-padding-x);
+
   box-sizing: border-box;
 }
-
 /* Responsive adjustments */
-@media (max-width: 768px) {
-  :root {
-    --content-padding-x: 1rem;
-  }
+.section {
+  padding: var(--section-padding-y) 0;
+  margin: var(--content-margin) 0;
 }
+/* ============================================ */
+/* Grid container */
+/* ============================================ */
+.grid-container {
+  display: grid;
+  gap: var(--gap-medium);
+}
+.grid-item {
+  padding: 1rem;
+}
+/* ============================================ */
+/* page-wrapper */
+/* ============================================ */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+/* ============================================ */
+/* content-wrapper */
+/* ============================================ */
+.content-wrapper {
+  flex-grow: 1;
+  margin-top: var(--content-margin);
+}
+/* ============================================ */
+/* content-section */
+/* ============================================ */
+.content-section {
+  padding: var(--content-padding) 0;
+}
+
 
 @media (max-width: 480px) {
   :root {
-    --content-padding-x: 0.75rem;
+      --content-padding-x: 0.75rem;
+    
   }
 }

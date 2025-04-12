@@ -1,22 +1,51 @@
-/*====================================================
-  MAIN STYLESHEET
-  Entry point for all styles
-====================================================*/
+/**
+ * Main Stylesheet
+ * This file serves as the primary entry point for all CSS styles in the project.
+ * It imports base styles, utility classes, component styles, and sets up the print styles.
+ */
 
-/* Base Styles */
+:root {
+  --content-padding: 2rem;
+  --content-margin: 2rem;
+  --section-padding: 3rem;
+  --gap-medium: 1.5rem;
+  --gap-large: 2.5rem;
+}
+
+
+
+/*------------------------------------*\
+    BASE STYLES
+\*------------------------------------*/
 @import './base/_variables.css';
 @import './base/_reset.css';
 
-/* Utilities */
+/*------------------------------------*\
+    UTILITIES
+\*------------------------------------*/
 @import './utils/_utilities.css';
 
-/* Components */
+/*------------------------------------*\
+    COMPONENTS
+\*------------------------------------*/
 @import './components/_landing-page.css';
 
-/* Print Styles */
+/*------------------------------------*\
+    PRINT STYLES
+    Styles specific for print media.
+\*------------------------------------*/
 @media print {
-  /* Add print-specific styles here */
   .no-print {
     display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --content-padding: 1rem;
+    --content-margin: 1rem;
+    --section-padding: 2rem;
+    --gap-medium: 1rem;
+    --gap-large: 1.5rem;
   }
 }

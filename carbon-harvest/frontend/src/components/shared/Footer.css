@@ -195,6 +195,31 @@
   color: var(--neutral-100);
 }
 
+/* Update the main container to use variables to change the padding, margin and gap properties, and add media query for small screens. */
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  padding: var(--section-padding) var(--content-padding);
+  gap: var(--gap-large);
+}
+.links-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-medium);
+  align-items: flex-start;
+}
+
+.copy-right-container {
+  text-align: center;
+}
+
+.copy-right {
+  width: 100%;
+  padding: var(--content-padding);
+}
+
 @media (max-width: 768px) {
   .footer-container {
     grid-template-columns: 1fr;
@@ -211,5 +236,11 @@
   
   .footer-nav {
     align-items: center;
+  }
+}
+
+@media (min-width: 768px) {
+  .footer-container {
+    flex-direction: row;
   }
 }
