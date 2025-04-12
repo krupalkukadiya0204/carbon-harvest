@@ -1,9 +1,11 @@
 .ad-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+    padding: var(--section-padding) var(--content-padding);
+    background-color: var(--background-light);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-large);
 }
-
 /* Promotional Banner Carousel */
 .promo-carousel {
   margin-bottom: 3rem;
@@ -142,5 +144,15 @@
   
   .cta-section {
     text-align: center;
+  }
+}
+.ad-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-medium);
+}
+@media (min-width: 768px) {
+  .ad-container {
+    flex-direction: row;
   }
 }

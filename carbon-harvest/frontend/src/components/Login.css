@@ -1,32 +1,30 @@
 .login-container {
-  min-height: 100vh;
+    min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--background-secondary);
   width: 100%;
+  background-color: var(--background-light);
 }
 
-.login-card {
-  background: var(--background-primary);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 2rem;
-  width: 100%;
-  max-width: 400px;
-  margin: 1rem;
-}
-
-.login-title {
-  color: var(--text-primary);
-  margin-bottom: var(--spacing-xl);
-}
+.login-card {\n    display: flex;\n    flex-direction: column;\n    width: 100%;\n    max-width: 400px;\n    gap: var(--gap-medium);\n    padding: var(--content-padding);\n    background-color: var(--background-color);\n    border-radius: var(--border-radius-lg);\n    box-shadow: var(--box-shadow);\n    margin: var(--content-margin);\n  }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--gap-medium);
 }
+
+.form-input-group {\n    display: flex;\n    flex-direction: column;\n    gap: var(--gap-small);\n  }
+
+.login-title {
+  margin-bottom: var(--gap-large);
+
+  width: 100%;
+}
+
+@media (max-width: 768px) {\n  .login-card{\n    margin: var(--content-padding);\n  }\n}
+
 
 .password-input-group {
   position: relative;
@@ -36,12 +34,11 @@
   position: absolute;
   right: var(--spacing-sm);
   top: 50%;
-  transform: translateY(-50%);
   background: none;
   border: none;
-  color: var(--text-secondary);
   cursor: pointer;
-  padding: var(--spacing-xs);
+  padding: 0;
+  color: var(--text-secondary);
   transition: color 0.2s ease;
 }
 
@@ -60,8 +57,7 @@
     text-align: center;
     color: var(--text-secondary);
 }
-
-.login-footer a {
+.login-footer a {\n    font-size: var(--font-size-small);\n
     color: var(--primary-color);
     text-decoration: none;
     transition: color 0.2s;

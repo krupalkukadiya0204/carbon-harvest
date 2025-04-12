@@ -1,28 +1,23 @@
-.crop-marketplace-container {
+.faq-container {
     padding: var(--section-padding) var(--content-padding);
     background-color: var(--background-light);
     display: flex;
     flex-direction: column;
     gap: var(--gap-large);
-}
-.crop-list-container {
+  }
+
+  .faq-list-container {
     display: flex;
     flex-direction: column;
     gap: var(--gap-medium);
-}
-.crop-card {
+  }
+
+  .faq-card {
     padding: var(--content-padding);
-}
-@media (min-width: 768px) {
-    .crop-list-container {
-        flex-direction: row;
-        flex-wrap: wrap;
+  }
+  @media (min-width: 768px) {
+    .faq-list-container {
+      flex-direction: row;
+      flex-wrap: wrap;
     }
-}
-.marketplace-header {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-    
-}
+  }

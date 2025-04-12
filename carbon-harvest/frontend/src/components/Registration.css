@@ -1,6 +1,21 @@
 .registration-container {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #f0f7ff 0%, #e6f0f9 100%);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: var(--gap-medium);
+  padding: var(--content-padding);
+  background-color: var(--background-light);
+}
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-medium);
+}
+
+.form-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-small);
 }
 
 .registration-form label {
@@ -8,15 +23,14 @@
     color: #343a40;
 }
 
-.registration-container {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #f0f7ff 0%, #e6f0f9 100%);
-    padding: 2rem;
+.registration-page-container {
+    min-height: 100vh;    
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     overflow: hidden;
+    background: linear-gradient(135deg, #f0f7ff 0%, #e6f0f9 100%);
 }
 
 .registration-container::before {
@@ -238,4 +252,14 @@
     background: #a0aec0;
     cursor: not-allowed;
     transform: none;
+}
+
+@media (min-width: 768px) {
+  .registration-container {
+    max-width: 500px;
+  }
+}
+
+.registration-form {
+  width: 100%;
 }

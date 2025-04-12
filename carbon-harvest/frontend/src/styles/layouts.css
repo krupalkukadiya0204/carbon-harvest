@@ -71,6 +71,29 @@
   margin-right: auto;
 }
 
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--background-light);
+}
+
+.layout-content {
+  padding: 0 var(--content-padding);
+}
+
+.section-content {
+  margin: var(--content-margin) 0;
+  background-color: var(--background-light);
+}
+.sidebar-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-large);
+}
+
+
+
 /*====================================================
   BACKGROUND PATTERNS
 ====================================================*/
@@ -107,5 +130,18 @@
 @media (min-width: 768px) {
   .layout-container {
     padding: var(--content-padding);
+  }
+}
+@media (min-width: 768px) {
+  .sidebar-section {
+    flex-direction: row;
+  }
+}
+@media (max-width: 768px) {
+  .layout-content {
+    padding: 0 var(--content-padding);
+  }
+  .sidebar-section {
+    flex-direction: column;
   }
 }

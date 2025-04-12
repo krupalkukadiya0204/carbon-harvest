@@ -1,10 +1,11 @@
 .insurance-portal {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.portal-header {
+    padding: var(--section-padding) var(--content-padding);
+    background-color: var(--background-light);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-large);
+  }
+.insurance-portal {
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -37,7 +38,7 @@
   margin-bottom: 1rem;
   text-align: center;
 }
-
+.insurance-container {
 .insurance-card h3 {
   color: #2c3e50;
   margin-bottom: 1rem;
@@ -91,11 +92,16 @@
   margin: 2rem 0;
 }
 
+.insurance-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-medium);
+  }
 @media (max-width: 768px) {
   .insurance-steps {
     margin-bottom: 1rem;
   }
-  
+}
   .insurance-card {
     margin-bottom: 1rem;
   }

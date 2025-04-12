@@ -1,0 +1,17 @@
+.guide-container {
+    padding: var(--section-padding) var(--content-padding);
+    background-color: var(--background-light);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-large);
+  }
+
+  .guide-sections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-medium);
+  }
+
+  .guide-section {
+    padding: var(--content-padding);
+  }

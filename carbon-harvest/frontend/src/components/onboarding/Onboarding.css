@@ -1,10 +1,10 @@
 .onboarding-container {
+    padding: var(--section-padding) var(--content-padding);
+    background-color: var(--background-light);
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 2rem;
-    background-color: #f5f5f5;
+    flex-direction: column;
+    gap: var(--gap-large);
+
 }
 
 .onboarding-form-wrapper {
@@ -41,6 +41,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
 }
 
 .form-group label {
@@ -114,11 +115,26 @@ button:disabled {
 }
 
 @media (max-width: 768px) {
+    .onboarding-steps-container {
+        flex-direction: column;
+        gap: var(--gap-medium);
+      }
     .onboarding-container {
         padding: 1rem;
     }
     
     .onboarding-form-wrapper {
         padding: 1.5rem;
+    }
+}
+
+.onboarding-steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-medium);
+}
+.onboarding-step-card {
+    padding: var(--content-padding);
+}
     }
 }
