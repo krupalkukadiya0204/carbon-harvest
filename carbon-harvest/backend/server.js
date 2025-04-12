@@ -1,40 +1,38 @@
-const redis = require('redis');
-const { promisify } = require('util');
+import redis from 'redis';
+import { promisify } from 'util';
+import helmet from 'helmet';
+import path from 'path';
+import cors from 'cors';
+import rateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
+import mongoose from 'mongoose';
+import morgan from 'morgan';
+import 'dotenv/config';
+import connectDB from './config/db.js';
+import authRoutes from './routes/authRoutes.js';
+import creditRoutes from './routes/creditRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import gamificationRoutes from './routes/gamificationRoutes.js';
+import onboardingRoutes from './routes/onboardingRoutes.js';
+import siteRoutes from './routes/siteRoutes.js';
+import settingsRoutes from './routes/settingsRoutes.js';
+import reportsRoutes from './routes/reportsRoutes.js';
+import blockchainRoutes from './routes/blockchainRoutes.js';
+import express from 'express';
+import xss from 'xss-clean';
+
 const client = redis.createClient();
 client.on('connect', () => {
     console.log('Connected to Redis');
 });
 client.on('error', (err) => {
     console.error('Redis error:', err);
-});
+}); 
 client.connect().catch(console.error);
 const getAsync = promisify(client.get).bind(client);
 const setAsync = promisify(client.set).bind(client);
-
-const helmet = require('helmet');
-const path = require('path');
-const cors = require('cors');
-const rateLimit = require('express-rate-limit');
-const mongoSanitize = require('express-mongo-sanitize');
-const mongoose = require('mongoose');
-const morgan = require('morgan');
-require('dotenv').config();
-const connectDB = require('./config/db');
-const authRoutes = require('./routes/authRoutes');
-const creditRoutes = require('./routes/creditRoutes');
-const userRoutes = require('./routes/userRoutes');
-const gamificationRoutes = require('./routes/gamificationRoutes');
-const onboardingRoutes = require('./routes/onboardingRoutes');
-const siteRoutes = require('./routes/siteRoutes');
-const settingsRoutes = require('./routes/settingsRoutes');
-const reportsRoutes = require('./routes/reportsRoutes');
-const blockchainRoutes = require('./routes/blockchainRoutes');
-
 const app = express();
-
-// Trust proxy setting for rate limiter
 app.set('trust proxy', 1);
-
 // Logging Middleware
 app.use(morgan('combined'));
 
@@ -119,6 +117,7 @@ const errorHandler = (err, req, res, next) => {
 app.use(errorHandler);
 
 // Handle Unhandled Routes
+
 app.all('*', (req, res) => {
     res.status(404).json({
         status: 'fail',
