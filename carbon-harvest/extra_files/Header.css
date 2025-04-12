@@ -22,7 +22,7 @@
   height: 60px;
   max-width: var(--content-max-width);
   margin: 0 auto;
-  padding: 0 var(--content-padding-x);
+  gap: 2rem;
 }
 
 /*====================================================
@@ -79,7 +79,6 @@
 ====================================================*/
 @media (max-width: 768px) {
   .nav-container {
-    padding: 0 1rem;
   }
 
   .nav-right {

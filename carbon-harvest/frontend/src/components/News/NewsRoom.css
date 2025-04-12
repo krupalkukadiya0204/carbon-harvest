@@ -73,6 +73,7 @@
   display: flex;
   justify-content: center;
   margin-top: 2rem;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 768px) {
@@ -83,5 +84,17 @@
   
   .news-card {
     margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .category-filters {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+@media (max-width: 500px) {
+  .pagination-container {
+    display: block;
   }
 }

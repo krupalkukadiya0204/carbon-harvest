@@ -127,3 +127,24 @@
   --z-index-tooltip: 1060;
 
 }
+
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 14px; 
+  }
+
+  body {
+    padding: 0 1rem; 
+    overflow-x: hidden; 
+  }
+}
+
+@media screen and (max-width: 500px) {
+  html {
+    font-size: 12px; 
+  }
+
+  body {
+    padding: 0 0.5rem; 
+  }
+}

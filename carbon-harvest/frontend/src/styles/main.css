@@ -4,6 +4,16 @@
  * It imports base styles, utility classes, component styles, and sets up the print styles.
  */
 
+:root {
+  --content-padding: 2rem;
+  --content-margin: 2rem;
+  --section-padding: 3rem;
+  --gap-medium: 1.5rem;
+  --gap-large: 2.5rem;
+}
+
+
+
 /*------------------------------------*\
     BASE STYLES
 \*------------------------------------*/
@@ -27,5 +37,15 @@
 @media print {
   .no-print {
     display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --content-padding: 1rem;
+    --content-margin: 1rem;
+    --section-padding: 2rem;
+    --gap-medium: 1rem;
+    --gap-large: 1.5rem;
   }
 }

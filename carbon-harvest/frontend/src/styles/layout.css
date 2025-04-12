@@ -3,16 +3,16 @@
   --content-padding-x: 1rem; /* Base padding for content */
   --content-max-width: 1440px;
   --section-margin: -1rem; /* Default margin for sections */
-  --section-margin-mobile: -0.5rem;
-  --section-padding-y: 4rem;
-  --section-padding-y-mobile: 2rem;
-  --grid-gap: 1rem;
-  --grid-gap-mobile: 0.5rem;
+  --section-margin-mobile: -0.5rem; /* Default margin for sections in mobile */
+  --section-padding-y: 4rem; /* Default padding for sections */
+  --section-padding-y-mobile: 2rem; /* Default padding for sections in mobile */
+  --grid-gap: 1rem; /* Default gap for grids */
+  --grid-gap-mobile: 0.5rem; /* Default gap for grids in mobile */
 
 }
 
 /* ============================================ */
-/* Full-Width Container */
+/* container */
 /* ============================================ */
 
 .full-width-container {
@@ -30,28 +30,28 @@
 }
 
 /* ============================================ */
-/* Content Container */
+/* Content Container (centered)*/
 /* ============================================ */
 
-.content-container {
+.container {
   width: 100%;
   max-width: var(--content-max-width);
   margin: 0 auto;
   padding: 0 var(--content-padding-x);
   box-sizing: border-box;
-  
   @media (max-width: 768px){
     padding: 0 calc(var(--content-padding-x) * 0.75);
-
   }
   @media (max-width: 480px) {
     padding: 0 calc(var(--content-padding-x) * 0.5);
-
   }
 }
 
 /* ============================================ */
 /* Full-Bleed Section */
+/* section */
+/* ============================================ */
+
 /* ============================================ */
 
 .full-bleed-section {
@@ -79,6 +79,43 @@
   box-sizing: border-box;
 }
 /* Responsive adjustments */
+.section {
+  padding: var(--section-padding-y) 0;
+  margin: var(--content-margin) 0;
+}
+/* ============================================ */
+/* Grid container */
+/* ============================================ */
+.grid-container {
+  display: grid;
+  gap: var(--gap-medium);
+}
+.grid-item {
+  padding: 1rem;
+}
+/* ============================================ */
+/* page-wrapper */
+/* ============================================ */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+/* ============================================ */
+/* content-wrapper */
+/* ============================================ */
+.content-wrapper {
+  flex-grow: 1;
+  margin-top: var(--content-margin);
+}
+/* ============================================ */
+/* content-section */
+/* ============================================ */
+.content-section {
+  padding: var(--content-padding) 0;
+}
+
+
 @media (max-width: 480px) {
   :root {
       --content-padding-x: 0.75rem;
