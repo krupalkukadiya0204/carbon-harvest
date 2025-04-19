@@ -1,6 +1,5 @@
 import redis from 'redis';
 import { promisify } from 'util';
-import helmet from 'helmet';
 import path from 'path';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
@@ -20,15 +19,21 @@ import reportsRoutes from './routes/reportsRoutes.js';
 import blockchainRoutes from './routes/blockchainRoutes.js';
 import express from 'express';
 import xss from 'xss-clean';
+import { fileURLToPath } from 'url';
 
-const client = redis.createClient();
+const client = redis.createClient(); 
+
 client.on('connect', () => {
     console.log('Connected to Redis');
 });
+
 client.on('error', (err) => {
     console.error('Redis error:', err);
 }); 
 client.connect().catch(console.error);
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const getAsync = promisify(client.get).bind(client);
 const setAsync = promisify(client.set).bind(client);
 const app = express();
@@ -82,7 +87,7 @@ app.use(express.static('public', {
 app.use('/api/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // Serve static files from the React build directory
-app.use(express.static(path.join(__dirname, '../frontend/build'), {
+app.use(express.static(path.join(__dirname, './frontend/build'), {
   setHeaders: (res, path) => {
     if (path.endsWith('.css')) {
       res.setHeader('Content-Type', 'text/css');
@@ -94,7 +99,7 @@ app.use(express.static(path.join(__dirname, '../frontend/build'), {
 
 // Serve index.html for all routes not starting with /api
 app.get(/^(?!\/api).+/, (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+    res.sendFile(path.join(__dirname, './frontend/build/index.html'));
 });
 
 // Connect to database
@@ -113,7 +118,7 @@ const errorHandler = (err, req, res, next) => {
         ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
     });
 };
-
+ 
 app.use(errorHandler);
 
 // Handle Unhandled Routes

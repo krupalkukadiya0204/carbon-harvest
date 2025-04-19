@@ -1,16 +1,17 @@
-/**
+ /**
  * @module authController
  * @file Authentication Controller - Handles user registration and login
  */
-const { sendPasswordResetEmail } = require('../services/verificationService');
-const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const xss = require('xss-clean/lib');
-const { body, validationResult } = require('express-validator'); const { generateVerificationToken, sendVerificationEmail } = require('../services/verificationService');
+import { sendPasswordResetEmail, generateVerificationToken, sendVerificationEmail } from '../services/verificationService.js';
+import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import xss from 'xss-clean/lib/index.js';
+import { body, validationResult } from 'express-validator';
 
-const ActivityLog = require('../models/ActivityLog');
-const User = require('../models/User');
+
+import ActivityLog from '../models/ActivityLog.js';
+import User from '../models/User.js';
 
 
 /**
@@ -22,7 +23,7 @@ const AUTH_ERRORS = {
     USER_NOT_FOUND: 'User not found',
     INVALID_CREDENTIALS: 'Invalid credentials',
     REGISTRATION_FAILED: 'Registration failed. Please check your details and try again.',
-    LOGIN_FAILED: 'Login failed. Please check your credentials and try again.'
+    LOGIN_FAILED: 'Login failed. Please check your credentials and try again.',
 
 
 const validateRegister = [
@@ -52,7 +53,7 @@ const validateAuth = [
  * @param {object} res - Express response object
  * @returns {Promise<void>}
  */
-const register = async (req, res) => {
+export const register = async (req, res) => {
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -133,7 +134,7 @@ const register = async (req, res) => {
  * @param {object} res - Express response object
  * @returns {Promise<void>}
  */
-const login = async (req, res) => {
+export const login = async (req, res) => {
         // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -210,7 +211,7 @@ const login = async (req, res) => {
  * @param {object} res - Express response object
  * @returns {Promise<void>}
  */
-const forgotPassword = async (req, res) => {
+export const forgotPassword = async (req, res) => {
     let { email } = req.body;
     // Sanitize inputs
     email = xss.clean(email);
@@ -236,12 +237,11 @@ const forgotPassword = async (req, res) => {
         console.error('Error during forgot password:', error.message);
         res.status(500).json({ message: 'Error during forgot password', error: error.message });    }
 };
-module.exports = { register, login, validateRegister, validateAuth, validateRefreshToken, refreshToken, verifyEmail, forgotPassword };
-const validateRefreshToken = [
+export const validateRefreshToken = [
     body('refreshToken').notEmpty().withMessage('Refresh token is required'),
 ];
 
-const refreshToken = async (req, res) => {
+export const refreshToken = async (req, res) => {
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -289,7 +289,7 @@ const refreshToken = async (req, res) => {
  * @param {object} res - Express response object
  * @returns {Promise<void>}
  */
-const verifyEmail = async (req, res) => {
+export const verifyEmail = async (req, res) => {
     let { token } = req.params;
     // Sanitize inputs
     token = xss.clean(token);
@@ -318,7 +318,7 @@ const verifyEmail = async (req, res) => {
  * @param {object} res - Express response object
  * @returns {Promise<void>}
  */
-const resetPassword = async (req, res) => {
+export const resetPassword = async (req, res) => {
     let { token, password } = req.body;
     // Sanitize inputs
     token = xss.clean(token);
@@ -349,10 +349,3 @@ const resetPassword = async (req, res) => {
         res.status(500).json({ message: 'Error during password reset', error: error.message });
     }
 };
-
-
-module.exports = {
-    register, login, validateRegister, validateAuth, validateRefreshToken, refreshToken, verifyEmail, forgotPassword,
-    resetPassword
-};
-
