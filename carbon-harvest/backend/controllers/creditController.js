@@ -37,7 +37,7 @@ const calculateSustainabilityMetrics = (creditType, amount) => {
         waterSaved: amount * 2.5,
         soilHealth: 75,
         biodiversityScore: 65
-    };
+    }; 
 
     switch (creditType) {
         case 'Soil Carbon':
