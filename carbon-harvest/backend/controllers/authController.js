@@ -224,7 +224,17 @@ export const forgotPassword = async (req, res) => {
         user.passwordResetToken = resetToken;
         user.passwordResetExpires = Date.now() + 3600000; // 1 hour
         await user.save();
-        await sendPasswordResetEmail(user.email, resetToken, user.name);
+         try {
+            await sendPasswordResetEmail(user.email, resetToken, user.name);
+        } catch (error) {
+            console.error('Error sending password reset email:', error);
+             // Log the activity
+             await ActivityLog.create({
+                userId: user._id,
+                action: 'password reset email sent failed',
+                details: `User ${user.name} email sent failed`
+            });
+            return res.status(500).json({ message: 'Failed to send password reset email' });
 
                 // Log the activity
                 await ActivityLog.create({
@@ -233,7 +243,10 @@ export const forgotPassword = async (req, res) => {
                     details: `User ${user.name} requested a password reset with email ${user.email}`
                 });
         res.status(200).json({ message: 'Password reset email sent' });
+        }
+
     } catch (error) {
+        
         console.error('Error during forgot password:', error.message);
         res.status(500).json({ message: 'Error during forgot password', error: error.message });    }
 };
